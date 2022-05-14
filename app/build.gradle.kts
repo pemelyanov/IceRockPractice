@@ -61,4 +61,9 @@ dependencies {
 
     //MarkdownView
     implementation(project(":markdown-view"))
+
+    //Navigation
+    val navigation_version: String by rootProject.extra
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
 }

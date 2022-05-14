@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/core_navigation"
+    app:startDestination="@id/authorizationFragment">
+
+    <fragment
+        android:id="@+id/authorizationFragment"
+        android:name="com.emelyanov.icerockpractice.modules.auth.presentation.AuthorizationFragment"
+        android:label="fragment_authorization"
+        tools:layout="@layout/fragment_authorization" >
+        <action
+            android:id="@+id/navigateToList"
+            app:destination="@id/repositoriesListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/core_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/repositoryDetailsFragment"
+        android:name="com.emelyanov.icerockpractice.modules.repos.modules.details.presentation.RepositoryDetailsFragment"
+        android:label="fragment_repo_details"
+        tools:layout="@layout/fragment_repo_details" />
+    <fragment
+        android:id="@+id/repositoriesListFragment"
+        android:name="com.emelyanov.icerockpractice.modules.repos.modules.list.presentation.RepositoriesListFragment"
+        android:label="Repositories"
+        tools:layout="@layout/fragment_repositories">
+        <action
+            android:id="@+id/navigateToDetails"
+            app:destination="@id/repositoryDetailsFragment"
+            app:launchSingleTop="true" />
+    </fragment>
+
+    <action
+        android:id="@+id/navigateToAuth"
+        app:destination="@id/authorizationFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/core_navigation"
+        app:popUpToInclusive="true" />
+</navigation>
