@@ -18,12 +18,3 @@ fun MainActivity.launchNavHost(
         }
     }
 }
-
-fun MainActivity.setupActionBarWithDestinations(
-    coreNavController: NavController
-) {
-    coreNavController.addOnDestinationChangedListener { _, destionation, _ ->
-        if(destionation.id == R.id.authorizationFragment) supportActionBar?.hide() else supportActionBar?.show()
-        if(destionation.id == R.id.repositoriesListFragment) supportActionBar?.setDisplayHomeAsUpEnabled(false)
-    }
-}

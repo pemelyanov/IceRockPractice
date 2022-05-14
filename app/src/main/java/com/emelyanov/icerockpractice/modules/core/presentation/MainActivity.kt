@@ -15,7 +15,6 @@ import com.emelyanov.icerockpractice.databinding.ActivityMainBinding
 import com.emelyanov.icerockpractice.modules.core.domain.CoreViewModel
 import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
 import com.emelyanov.icerockpractice.navigation.core.launchNavHost
-import com.emelyanov.icerockpractice.navigation.core.setupActionBarWithDestinations
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private val coreViewModel: CoreViewModel by viewModels()
+    private var destinationListener: NavController.OnDestinationChangedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,5 +53,24 @@ class MainActivity : AppCompatActivity() {
             true
         }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun setupActionBarWithDestinations(
+        coreNavController: NavController
+    ) {
+        if(destinationListener == null)
+            destinationListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+                if(destination.id == R.id.authorizationFragment) supportActionBar?.hide() else supportActionBar?.show()
+                if(destination.id == R.id.repositoriesListFragment) supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+
+        coreNavController.addOnDestinationChangedListener(destinationListener!!)
+    }
+
+    override fun onDestroy() {
+        destinationListener?.let {
+            navController.removeOnDestinationChangedListener(it)
+        }
+        super.onDestroy()
     }
 }
