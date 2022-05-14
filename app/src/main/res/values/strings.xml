@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">IceRockPractice</string>
+    <string name="logo">Logo</string>
+    <string name="personal_access_token">Personal access token</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="retry">Retry</string>
+    <string name="no_connection_icon">No connection icon</string>
+    <string name="connection_error">Connection error</string>
+    <string name="check_your_internet_connection">Check your Internet connection</string>
+    <string name="folder_icon">Folder icon</string>
+    <string name="empty">Empty</string>
+    <string name="no_repositories_at_the_moment">No repositories at the moment</string>
+    <string name="refresh">Refresh</string>
+    <string name="error_icon">Error Icon</string>
+    <string name="something_error">Something error</string>
+    <string name="check_your_something">Check your something</string>
+    <string name="scales_icon">Scales icon</string>
+    <string name="license">License</string>
+    <string name="star_icon">Star icon</string>
+    <string name="stars">stars</string>
+    <string name="link_icon">Link icon</string>
+    <string name="fork_icon">Fork icon</string>
+    <string name="forks">forks</string>
+    <string name="watch_icon">Watch icon</string>
+    <string name="watchers">watchers</string>
 </resources>

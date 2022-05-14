@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_link.xml" value="0.167" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_logout_button.xml" value="0.112" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_authorization.xml" value="0.264" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_repo_details.xml" value="0.264" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_repositories.xml" value="0.4523809523809524" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_connection_error_state.xml" value="0.2359375" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_empty_state.xml" value="0.2" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_error_state.xml" value="0.23489583333333333" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_list_item.xml" value="0.264" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

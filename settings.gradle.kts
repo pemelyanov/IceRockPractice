@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "IceRockPractice"
-include ':app'
+include (":app")
+include (":markdown-view")

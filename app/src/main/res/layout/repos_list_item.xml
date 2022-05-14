@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/repo_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Test Repo"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/repo_lang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/repo_title"
+        android:text="Kotlin"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/repo_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/repo_title"
+        app:layout_constraintTop_toBottomOf="@id/repo_title"
+        app:layout_constraintEnd_toEndOf="@id/repo_lang"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:text="DESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTION"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

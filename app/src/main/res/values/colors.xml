@@ -7,4 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="git_pale_dark_blue">#161B22</color>
+    <color name="git_dark_blue">#0D1117</color>
+    <color name="git_gray">#21262D</color>
+    <color name="git_red">#B00020</color>
+    <color name="git_blue">#58A6FF</color>
+    <color name="git_green">#438440</color>
+    <color name="git_yellow">#FAD876</color>
+    <color name="git_lime">#6ED370</color>
+    <color name="git_diamond">#9CFFF9</color>
 </resources>
