@@ -44,6 +44,12 @@ class MarkdownView(
         html = html.removePrefix("<body>")
         html = html.removeSuffix("</body>")
 
-        loadDataWithBaseURL(null, baseHtml.replace("renderbody", html),"text/html", "utf-8", null)
+        loadMarkdownHtml(html)
     }
+
+    /**
+     * Displays rendered to html markdown with default dark github theme.
+     */
+    fun loadMarkdownHtml(html: String)
+    = loadDataWithBaseURL(null, baseHtml.replace("renderbody", html),"text/html", "utf-8", null)
 }
