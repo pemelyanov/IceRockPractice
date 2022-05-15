@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context=".modules.auth.presentation.AuthorizationFragment">
+    tools:context=".modules.auth.presentation.AuthFragment">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -55,6 +55,7 @@ dependencies {
     //Retrofit
     val retrofit_version: String by rootProject.extra
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     //Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")

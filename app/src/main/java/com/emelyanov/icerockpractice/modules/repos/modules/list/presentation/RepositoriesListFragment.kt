@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.emelyanov.icerockpractice.R
-import com.emelyanov.icerockpractice.databinding.FragmentAuthorizationBinding
 import com.emelyanov.icerockpractice.databinding.FragmentRepositoriesBinding
 import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.RepositoriesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
