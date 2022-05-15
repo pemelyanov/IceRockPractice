@@ -17,4 +17,8 @@
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.IceRockPractice.SplashScreen" parent="Theme.IceRockPractice">
+        <item name="android:windowBackground">@drawable/bg_splashscreen</item>
+    </style>
 </resources>

@@ -2,7 +2,6 @@ package com.emelyanov.icerockpractice.modules.core.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.navigation.NavController
@@ -13,7 +12,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.emelyanov.icerockpractice.R
 import com.emelyanov.icerockpractice.databinding.ActivityMainBinding
 import com.emelyanov.icerockpractice.modules.core.domain.CoreViewModel
-import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
 import com.emelyanov.icerockpractice.navigation.core.launchNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -29,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setTheme(R.style.Theme_IceRockPractice)
         setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.coreNavContainer) as NavHostFragment
