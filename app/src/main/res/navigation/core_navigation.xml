@@ -21,7 +21,11 @@
         android:id="@+id/repositoryDetailsFragment"
         android:name="com.emelyanov.icerockpractice.modules.repos.modules.details.presentation.DetailInfoFragment"
         android:label="fragment_repo_details"
-        tools:layout="@layout/fragment_repo_details" />
+        tools:layout="@layout/fragment_repo_details" >
+        <argument
+            android:name="repoId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/repositoriesListFragment"
         android:name="com.emelyanov.icerockpractice.modules.repos.modules.list.presentation.RepositoriesListFragment"

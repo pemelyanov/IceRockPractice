@@ -5,8 +5,10 @@ import com.emelyanov.icerockpractice.shared.domain.models.responses.RepositoryDe
 
 fun RepositoryDetailsResponse.toRepoDetails()
 = RepoDetails(
-    fullName = this.fullName,
-    license = this.license.name,
+    url = this.htmlUrl,
+    name = this.name,
+    owner = this.owner.login,
+    license = this.license?.name ?: "",
     stargazersCount = this.stargazersCount,
     forksCount = this.forksCount,
     watchersCount = this.watchersCount

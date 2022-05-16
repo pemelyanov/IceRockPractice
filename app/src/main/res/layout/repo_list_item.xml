@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/repo_title"
         android:text="Kotlin"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="@color/white"
         android:textSize="12sp"/>
 
     <TextView
@@ -35,5 +35,8 @@
         app:layout_constraintEnd_toEndOf="@id/repo_lang"
         android:textColor="@color/white"
         android:textSize="14sp"
-        android:text="DESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTION"/>
+        android:text="DESCRIPTIONDESCRIPTIONDasdasdasdfasdfasdfsadfasdfasdfasdfdfsdfasdfasdfasdfsadfasdfESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTION"
+        android:maxLines="3"
+        android:ellipsize="end"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

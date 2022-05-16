@@ -4,6 +4,8 @@ import android.content.Context
 import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.AppRepository
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.IAppRepository
+import com.emelyanov.icerockpractice.shared.domain.services.colors.ILanguageColorsRepository
+import com.emelyanov.icerockpractice.shared.domain.services.colors.LanguageColorsRepository
 import com.emelyanov.icerockpractice.shared.domain.services.githubapi.IGitHubApi
 import com.emelyanov.icerockpractice.shared.domain.services.keyvaluestorage.IKeyValueStorage
 import com.emelyanov.icerockpractice.shared.domain.services.keyvaluestorage.KeyValueStorage
@@ -46,14 +48,20 @@ class ModuleCore {
 
     @Singleton
     @Provides
+    fun provideColorsRepository(@ApplicationContext context: Context): ILanguageColorsRepository = LanguageColorsRepository(context)
+
+    @Singleton
+    @Provides
     fun provideAppRepository(
         gitHubApi: IGitHubApi,
         getAuthHeaderUseCase: GetAuthHeaderUseCase,
-        keyValueStorage: IKeyValueStorage
+        keyValueStorage: IKeyValueStorage,
+        colorsRepository: ILanguageColorsRepository
     ): IAppRepository
     = AppRepository(
         gitHubApi = gitHubApi,
         getAuthHeader = getAuthHeaderUseCase,
-        keyValueStorage = keyValueStorage
+        keyValueStorage = keyValueStorage,
+        colorsRepository = colorsRepository
     )
 }

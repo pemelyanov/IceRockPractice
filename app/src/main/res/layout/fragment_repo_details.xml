@@ -14,8 +14,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/detail_error_state"
-        app:layout_constraintVertical_bias="0"
         app:layout_constraintVertical_chainStyle="packed">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,7 +45,6 @@
                 android:maxLines="1"
                 android:textColor="?attr/colorSecondary"
                 android:textSize="16sp"
-                android:textIsSelectable="true"
                 android:text="github.com/icerockdev/moko-resources"/>
 
             <ImageView
@@ -74,6 +71,7 @@
                 android:text="@string/license"/>
 
             <TextView
+                android:id="@+id/license_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
@@ -232,7 +230,7 @@
                 app:flow_verticalGap="6dp"/>
 
             <com.emelyanov.markdownview.MarkdownView
-                android:id="@+id/readme_md_view"
+                android:id="@+id/readme_view"
                 android:layout_width="0dp"
                 android:layout_marginVertical="20dp"
                 android:layout_height="wrap_content"
@@ -242,19 +240,49 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:ignore="WebViewLayout" />
 
+            <ProgressBar
+                android:id="@+id/readme_progressbar"
+                style="@style/GitProgressbar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/info_flow"
+                app:layout_constraintStart_toStartOf="@id/info_flow"
+                app:layout_constraintEnd_toEndOf="@id/info_flow"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <include
-        android:visibility="gone"
-        android:id="@+id/detail_error_state"
-        layout="@layout/repos_connection_error_state"
-        app:layout_constraintVertical_bias="1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/details_scroll_container"
-        app:layout_constraintStart_toStartOf="parent"
+    <ProgressBar
+        android:id="@+id/repo_progressbar"
+        style="@style/GitProgressbar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/repo_error_state"
+        layout="@layout/repos_error_state"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_scroll_container"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/repo_connection_error_state"
+        layout="@layout/repos_connection_error_state"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_scroll_container"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

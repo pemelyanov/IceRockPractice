@@ -1,8 +1,10 @@
 package com.emelyanov.icerockpractice.shared.domain.services.apprepository
 
+import android.util.Base64
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
 import com.emelyanov.icerockpractice.shared.domain.models.UserInfo
+import com.emelyanov.icerockpractice.shared.domain.services.colors.ILanguageColorsRepository
 import com.emelyanov.icerockpractice.shared.domain.services.githubapi.IGitHubApi
 import com.emelyanov.icerockpractice.shared.domain.services.keyvaluestorage.IKeyValueStorage
 import com.emelyanov.icerockpractice.shared.domain.services.keyvaluestorage.KeyValueStorage
@@ -15,13 +17,17 @@ import com.emelyanov.icerockpractice.shared.domain.utils.toUserInfo
 class AppRepository(
     private val gitHubApi: IGitHubApi,
     private val getAuthHeader: GetAuthHeaderUseCase,
-    private val keyValueStorage: IKeyValueStorage
+    private val keyValueStorage: IKeyValueStorage,
+    private val colorsRepository: ILanguageColorsRepository
 ) : IAppRepository {
     override suspend fun getRepositories(): List<Repo>
     = gitRequestWrapper {
         gitHubApi.getRepositories(getAuthHeader())
-    }.map {
-        it.toRepo()
+    }.map { repoResponse ->
+        repoResponse.toRepo().let { repo ->
+            if(repo.language.isEmpty()) return@let repo
+            repo.copy(color = colorsRepository.getLangColor(repo.language))
+        }
     }
 
     override suspend fun getRepository(repoId: String): RepoDetails
@@ -38,7 +44,23 @@ class AppRepository(
         repositoryName: String,
         branchName: String
     ): String {
-        TODO("Not yet implemented")
+        return gitRequestWrapper {
+            if(branchName.isEmpty())
+                gitHubApi.getReadme(
+                    token = getAuthHeader(),
+                    owner = ownerName,
+                    repo = repositoryName
+                )
+            else
+                gitHubApi.getReadme(
+                    token = getAuthHeader(),
+                    owner = ownerName,
+                    repo = repositoryName,
+                    branch = branchName
+                )
+        }.let {
+            Base64.decode(it.content, Base64.DEFAULT).decodeToString()
+        }
     }
 
     override suspend fun signIn(token: String): UserInfo

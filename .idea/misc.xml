@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/bg_dialog.xml" value="0.155" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/bg_ripplr.xml" value="0.136" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/bg_splashscreen.xml" value="0.137" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_combined_logo.xml" value="0.137" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_link.xml" value="0.167" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_logout_button.xml" value="0.112" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/recycler_divider.xml" value="0.136" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_auth.xml" value="0.2359375" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_authorization.xml" value="0.264" />

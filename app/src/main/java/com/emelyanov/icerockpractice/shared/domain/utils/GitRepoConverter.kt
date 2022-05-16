@@ -8,5 +8,6 @@ fun RepositoryShortResponse.toRepo()
 = Repo(
     name = this.name,
     description = this.description ?: "",
-    language = this.language ?: ""
+    language = this.language ?: "",
+    color = null
 )
