@@ -59,8 +59,8 @@ class AuthFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.actions.collect {
                     if(it is AuthViewModel.Action.ShowError) {
-                        AlertDialog.Builder(requireContext())
-                            .setPositiveButton("Ok", DialogInterface.OnClickListener({d,_ -> d.cancel()}))
+                        AlertDialog.Builder(requireContext(), R.style.GitAlertDialog)
+                            .setPositiveButton("Ok") { d, _ -> d.cancel() }
                             .setMessage(it.message)
                             .setTitle("Error")
                             .create()

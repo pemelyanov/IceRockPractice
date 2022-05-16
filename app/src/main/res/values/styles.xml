@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="IceRockTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+    <style name="GitTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textColorHint">#88FFFFFF</item>
         <item name="hintTextColor">?attr/colorSecondary</item>
         <item name="boxStrokeColor">@color/text_field_color</item>
+        <item name="errorTextColor">@color/git_red</item>
     </style>
 
-    <style name="IceRockButton" parent="ThemeOverlay.Material3.Button">
+    <style name="GitButton" parent="ThemeOverlay.Material3.Button">
         <item name="backgroundTint">?attr/colorAccent</item>
         <item name="cornerRadius">8dp</item>
     </style>
 
-    <style name="IceRockProgressbar" parent="Widget.AppCompat.ProgressBar">
+    <style name="GitProgressbar" parent="Widget.AppCompat.ProgressBar">
         <item name="android:elevation">2dp</item>
         <item name="android:indeterminateTint">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="IceRockLinkButton" parent="Widget.Material3.Button.TextButton">
+    <style name="GitLinkButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">?attr/colorSecondary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAlignment">textStart</item>
@@ -25,9 +26,20 @@
         <item name="iconTint">?attr/colorSecondary</item>
     </style>
 
-    <style name="IceRockAlertDialog" parent="MaterialAlertDialog.Material3">
-        <item name="colorSurface">@color/git_dark_blue</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="colorPrimary">@color/white</item>
+    <style name="GitAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowBackground">@color/git_dark_blue</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/GitAlertPositiveButton</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/GitAlertNegativeButton</item>
+    </style>
+
+    <style name="GitAlertPositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/git_blue</item>
+        <item name="rippleColor">@color/git_pale_dark_blue</item>
+    </style>
+
+    <style name="GitAlertNegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/git_red</item>
+        <item name="rippleColor">@color/git_pale_dark_blue</item>
     </style>
 </resources>
