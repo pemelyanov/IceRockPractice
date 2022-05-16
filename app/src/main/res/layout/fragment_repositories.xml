@@ -6,14 +6,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".modules.repos.modules.list.presentation.RepositoriesListFragment">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/go_to_details_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go TO DEtails"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/repos_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <ProgressBar
+        android:id="@+id/repos_progressbar"
+        style="@style/IceRockProgressbar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/repos_error_state"
+        layout="@layout/repos_error_state"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/repos_empty_state"
+        layout="@layout/repos_empty_state"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/repos_connection_error_state"
+        layout="@layout/repos_connection_error_state"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

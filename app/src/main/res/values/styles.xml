@@ -24,4 +24,10 @@
         <item name="fontWeight">500</item>
         <item name="iconTint">?attr/colorSecondary</item>
     </style>
+
+    <style name="IceRockAlertDialog" parent="MaterialAlertDialog.Material3">
+        <item name="colorSurface">@color/git_dark_blue</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+    </style>
 </resources>

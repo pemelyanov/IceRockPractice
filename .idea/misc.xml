@@ -3,14 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/bg_ripplr.xml" value="0.136" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/bg_splashscreen.xml" value="0.137" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_combined_logo.xml" value="0.137" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_link.xml" value="0.167" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/drawable/ic_logout_button.xml" value="0.112" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_auth.xml" value="0.2359375" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_authorization.xml" value="0.264" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_repo_details.xml" value="0.264" />
-        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_repositories.xml" value="0.264" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/fragment_repositories.xml" value="0.152" />
+        <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repo_list_item.xml" value="0.2359375" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_connection_error_state.xml" value="0.2359375" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_empty_state.xml" value="0.2" />
         <entry key="..\:/Users/pemel/AndroidStudioProjects/IceRockPractice/app/src/main/res/layout/repos_error_state.xml" value="0.23489583333333333" />

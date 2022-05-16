@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="15dp"
-        android:text="@string/sign_in"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="@id/auth_button"
         app:layout_constraintStart_toStartOf="@id/auth_button"
         app:layout_constraintEnd_toEndOf="@id/auth_button"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

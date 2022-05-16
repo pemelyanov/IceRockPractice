@@ -5,6 +5,7 @@ buildscript {
     val retrofit_version by extra { "2.9.0" }
     val markdown_version by extra { "0.19.0" }
     val navigation_version by extra { "2.4.2" }
+    val lifecycle_version by extra { "2.4.1" }
 
     dependencies {
         classpath("com.google.dagger:hilt-android-gradle-plugin:$hilt_version")
