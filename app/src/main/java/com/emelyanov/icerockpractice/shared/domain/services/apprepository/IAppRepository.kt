@@ -14,4 +14,6 @@ interface IAppRepository {
         suspend fun signIn(token: String): UserInfo
 
         fun logout()
+
+        suspend fun getImageUrl(owner: String, repo: String, path: String): String
 }

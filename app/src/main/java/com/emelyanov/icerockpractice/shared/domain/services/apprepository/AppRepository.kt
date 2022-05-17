@@ -75,4 +75,14 @@ class AppRepository(
         keyValueStorage.authToken = null
         keyValueStorage.userName = null
     }
+
+    override suspend fun getImageUrl(owner: String, repo: String, path: String): String
+    = gitRequestWrapper {
+        gitHubApi.getContent(
+            token = getAuthHeader(),
+            owner = owner,
+            repo = repo,
+            path = path
+        )
+    }.downloadUrl
 }

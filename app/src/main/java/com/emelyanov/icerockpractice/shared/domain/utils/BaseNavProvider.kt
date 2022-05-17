@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * NavProvider for navigating from view models
+ */
 open class BaseNavProvider<D> {
     protected val destinationFlow: MutableStateFlow<D?> = MutableStateFlow(null)
 

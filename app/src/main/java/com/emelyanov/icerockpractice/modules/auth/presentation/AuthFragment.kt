@@ -17,6 +17,7 @@ import com.emelyanov.icerockpractice.R
 import com.emelyanov.icerockpractice.databinding.FragmentAuthBinding
 import com.emelyanov.icerockpractice.modules.auth.domain.AuthViewModel
 import com.emelyanov.icerockpractice.shared.domain.utils.bindTextTwoWay
+import com.emelyanov.markdownview.MarkdownView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,18 +37,20 @@ class AuthFragment : Fragment() {
     ): View {
         binding = FragmentAuthBinding.inflate(inflater, container, false)
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            binding.authButtonProgressbar.visibility = if(it is AuthViewModel.State.Loading) View.VISIBLE else View.GONE
-            binding.authButton.isEnabled = it !is AuthViewModel.State.Loading
-            binding.authButton.text = if(it is AuthViewModel.State.Loading) "" else getText(R.string.sign_in)
-            binding.tokenField.error = if(it is AuthViewModel.State.InvalidInput) it.reason else ""
-        }
+        with(binding){
+            viewModel.state.observe(viewLifecycleOwner) {
+                authButtonProgressbar.visibility = if(it is AuthViewModel.State.Loading) android.view.View.VISIBLE else android.view.View.GONE
+                authButton.isEnabled = it !is AuthViewModel.State.Loading
+                authButton.text = if(it is AuthViewModel.State.Loading) "" else getText(com.emelyanov.icerockpractice.R.string.sign_in)
+                tokenField.error = if(it is AuthViewModel.State.InvalidInput) it.reason else ""
+            }
 
-        binding.authButton.setOnClickListener {
-            viewModel.onSignButtonPressed()
-        }
+            authButton.setOnClickListener {
+                viewModel.onSignButtonPressed()
+            }
 
-        binding.tokenField.editText?.bindTextTwoWay(viewModel.token, this)
+            tokenField.editText?.bindTextTwoWay(viewModel.token, this@AuthFragment)
+        }
 
         return binding.root
     }
@@ -60,7 +63,7 @@ class AuthFragment : Fragment() {
                 viewModel.actions.collect {
                     if(it is AuthViewModel.Action.ShowError) {
                         AlertDialog.Builder(requireContext(), R.style.GitAlertDialog)
-                            .setPositiveButton("Ok") { d, _ -> d.cancel() }
+                            .setPositiveButton("Ok") { d, _ -> }
                             .setMessage(it.message)
                             .setTitle("Error")
                             .create()

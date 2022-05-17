@@ -13,6 +13,11 @@ import com.emelyanov.icerockpractice.modules.core.presentation.MainActivity
 import com.emelyanov.icerockpractice.modules.repos.modules.details.presentation.DetailInfoFragment
 import kotlinx.coroutines.launch
 
+/**
+ * Launches destination observing.
+ * @param coreNavProvider - input nav provider for observing
+ * @param coreNavController - input nav controller for routing
+ */
 fun MainActivity.launchNavHost(
     coreNavProvider: CoreNavProvider,
     coreNavController: NavController
@@ -32,6 +37,9 @@ fun MainActivity.launchNavHost(
     }
 }
 
+/**
+ * Setups action bar with nav controller destinations for hiding some elements on specific routes
+ */
 fun MainActivity.setupActionBarWithDestinations(
     coreNavController: NavController
 ) {

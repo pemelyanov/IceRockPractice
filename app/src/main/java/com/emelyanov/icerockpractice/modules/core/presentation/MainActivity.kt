@@ -1,10 +1,15 @@
 package com.emelyanov.icerockpractice.modules.core.presentation
 
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import androidx.activity.viewModels
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,6 +21,8 @@ import com.emelyanov.icerockpractice.modules.core.domain.CoreViewModel
 import com.emelyanov.icerockpractice.navigation.core.launchNavHost
 import com.emelyanov.icerockpractice.navigation.core.setupActionBarWithDestinations
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +38,27 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_IceRockPractice)
         setContentView(binding.root)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                coreViewModel.actions.collect {
+                    when(it) {
+                        is CoreViewModel.Action.ShowExitDialog -> {
+                            AlertDialog.Builder(this@MainActivity, R.style.GitAlertDialog)
+                                .setTitle("Logout")
+                                .setMessage("Are you sure want to logout?")
+                                .setPositiveButton("Yes") { _, _ ->
+                                    it.onSuccess()
+                                }
+                                .setNegativeButton("No") { _, _ ->
+                                }
+                                .create()
+                                .show()
+                        }
+                    }
+                }
+            }
+        }
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.coreNavContainer) as NavHostFragment
         navController = navHostFragment.navController
@@ -50,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.git_appbar, menu)
         menu?.findItem(R.id.logout_button)?.setOnMenuItemClickListener {
-            coreViewModel.logoutClick()
+            coreViewModel.onLogoutClick()
             true
         }
         return super.onCreateOptionsMenu(menu)

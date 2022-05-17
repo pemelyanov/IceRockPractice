@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@id/auth_button">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/auth_logo"
                 android:layout_width="80dp"
@@ -42,13 +42,19 @@
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/auth_logo">
+                app:layout_constraintTop_toBottomOf="@id/auth_logo"
+                android:maxLines="1"
+                android:inputType="text"
+                android:ellipsize="end">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#00ffffff"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:ellipsize="end" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

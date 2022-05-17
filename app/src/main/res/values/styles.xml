@@ -31,6 +31,7 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/GitAlertPositiveButton</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/GitAlertNegativeButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/GitAlertPositiveButton</item>
     </style>
 
     <style name="GitAlertPositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">

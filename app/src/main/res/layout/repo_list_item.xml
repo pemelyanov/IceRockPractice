@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Test Repo"
+        android:text=""
         android:textColor="?attr/colorSecondary"
         android:textSize="16sp"/>
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/repo_title"
-        android:text="Kotlin"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="12sp"/>
 
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="@id/repo_lang"
         android:textColor="@color/white"
         android:textSize="14sp"
-        android:text="DESCRIPTIONDESCRIPTIONDasdasdasdfasdfasdfsadfasdfasdfasdfdfsdfasdfasdfasdfsadfasdfESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTIONDESCRIPTION"
+        android:text=""
         android:maxLines="3"
         android:ellipsize="end"
         />

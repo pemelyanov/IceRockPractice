@@ -45,7 +45,7 @@
                 android:maxLines="1"
                 android:textColor="?attr/colorSecondary"
                 android:textSize="16sp"
-                android:text="github.com/icerockdev/moko-resources"/>
+                android:text=""/>
 
             <ImageView
                 android:id="@+id/scales_icon"
@@ -112,7 +112,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/star_icon"
                     android:textColor="@color/git_yellow"
                     android:textSize="16sp"
-                    android:text="256"/>
+                    android:text=""/>
 
                 <TextView
                     android:id="@+id/stars_caption"
@@ -155,7 +155,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/fork_icon"
                     android:textColor="@color/git_lime"
                     android:textSize="16sp"
-                    android:text="256"/>
+                    android:text=""/>
 
                 <TextView
                     android:id="@+id/forks_caption"
@@ -198,7 +198,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/watch_icon"
                     android:textColor="@color/git_diamond"
                     android:textSize="16sp"
-                    android:text="25666666"/>
+                    android:text=""/>
 
                 <TextView
                     android:id="@+id/watches_caption"

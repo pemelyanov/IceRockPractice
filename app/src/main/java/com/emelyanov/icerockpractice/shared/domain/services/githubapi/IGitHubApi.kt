@@ -1,9 +1,6 @@
 package com.emelyanov.icerockpractice.shared.domain.services.githubapi
 
-import com.emelyanov.icerockpractice.shared.domain.models.responses.ReadmeResponse
-import com.emelyanov.icerockpractice.shared.domain.models.responses.RepositoryDetailsResponse
-import com.emelyanov.icerockpractice.shared.domain.models.responses.RepositoryShortResponse
-import com.emelyanov.icerockpractice.shared.domain.models.responses.UserInfoResponse
+import com.emelyanov.icerockpractice.shared.domain.models.responses.*
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -41,4 +38,12 @@ interface IGitHubApi {
         @Path("repo") repo: String,
         @Query("ref") branch: String
     ) : ReadmeResponse
+
+    @GET("/repos/{owner}/{repo}/contents/{path}")
+    suspend fun getContent(
+        @Header("Authorization") token: String,
+        @Path("owner") owner: String,
+        @Path("repo") repo: String,
+        @Path("path") path: String
+    ) : ContentResponse
 }

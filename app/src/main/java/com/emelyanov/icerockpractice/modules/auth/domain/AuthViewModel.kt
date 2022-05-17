@@ -39,8 +39,8 @@ constructor(
         get() = _actions.receiveAsFlow()
 
     init {
+        //Try to auth from local storage
         viewModelScope.launch {
-            _state.postValue(State.Loading)
             try {
                 val token = getToken()
                 if(token == null) {

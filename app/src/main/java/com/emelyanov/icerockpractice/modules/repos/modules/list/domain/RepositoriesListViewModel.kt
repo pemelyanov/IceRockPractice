@@ -15,6 +15,7 @@ import com.emelyanov.icerockpractice.shared.domain.utils.ConnectionErrorExceptio
 import com.emelyanov.icerockpractice.shared.domain.utils.ServerNotRespondingException
 import com.emelyanov.icerockpractice.shared.domain.utils.UnauthorizedException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ constructor(
     }
 
     fun refresh() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.postValue(State.Loading)
             try {
                 getRepos().let {
