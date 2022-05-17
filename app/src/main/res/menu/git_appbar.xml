@@ -5,6 +5,6 @@
         android:id="@+id/logout_button"
         android:icon="@drawable/ic_logout_button"
         app:showAsAction="always"
-        android:title="@string/logout"
+        android:title="@string/logout_dialog_title"
         />
 </menu>

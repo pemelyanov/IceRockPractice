@@ -3,10 +3,8 @@ package com.emelyanov.icerockpractice.modules.core.presentation
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -23,7 +21,6 @@ import com.emelyanov.icerockpractice.navigation.core.setupActionBarWithDestinati
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,12 +42,12 @@ class MainActivity : AppCompatActivity() {
                     when(it) {
                         is CoreViewModel.Action.ShowExitDialog -> {
                             AlertDialog.Builder(this@MainActivity, R.style.GitAlertDialog)
-                                .setTitle("Logout")
-                                .setMessage("Are you sure want to logout?")
-                                .setPositiveButton("Yes") { _, _ ->
+                                .setTitle(getString(R.string.logout_dialog_title))
+                                .setMessage(getString(R.string.logout_dialog_message))
+                                .setPositiveButton(getString(R.string.logout_dialog_positive_button)) { _, _ ->
                                     it.onSuccess()
                                 }
-                                .setNegativeButton("No") { _, _ ->
+                                .setNegativeButton(getString(R.string.logout_dialog_negative_button)) { _, _ ->
                                 }
                                 .create()
                                 .show()

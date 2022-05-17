@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.emelyanov.icerockpractice.R
+
 import com.emelyanov.icerockpractice.databinding.FragmentRepositoriesBinding
 import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.RepositoriesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,11 +57,11 @@ class RepositoriesListFragment : Fragment() {
                     reposErrorState.root.visibility = View.VISIBLE
                     reposErrorState.errorDescription.text = it.error
                 } else { reposErrorState.root.visibility = View.GONE }
-            }
 
-            binding.reposEmptyState.refreshButton.setOnClickListener { viewModel.refresh() }
-            binding.reposConnectionErrorState.retryButton.setOnClickListener { viewModel.refresh() }
-            binding.reposErrorState.refreshButton.setOnClickListener { viewModel.refresh() }
+                reposEmptyState.refreshButton.setOnClickListener { viewModel.refresh() }
+                reposConnectionErrorState.retryButton.setOnClickListener { viewModel.refresh() }
+                reposErrorState.refreshButton.setOnClickListener { viewModel.refresh() }
+            }
         }
 
         return binding.root

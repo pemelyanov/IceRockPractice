@@ -27,7 +27,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/repo_link"
                 app:layout_constraintBottom_toBottomOf="@id/repo_link"
-                android:contentDescription="@string/link_icon"
+                android:contentDescription="@string/link_icon_description"
                 android:src="@drawable/ic_link"
                 app:tint="?attr/colorSecondary"/>
 
@@ -56,7 +56,7 @@
                 app:layout_constraintTop_toBottomOf="@id/repo_link"
                 android:src="@drawable/ic_scales"
                 app:tint="@color/white"
-                android:contentDescription="@string/scales_icon"/>
+                android:contentDescription="@string/scales_icon_description"/>
 
             <TextView
                 android:id="@+id/license_caption"
@@ -68,7 +68,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/scales_icon"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
-                android:text="@string/license"/>
+                android:text="@string/license_caption"/>
 
             <TextView
                 android:id="@+id/license_name"
@@ -83,7 +83,7 @@
                 android:textAlignment="textEnd"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
-                android:text="@string/license"/>
+                android:text="@string/license_caption"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stars_group"
@@ -100,7 +100,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:src="@drawable/ic_star"
                     app:tint="@color/git_yellow"
-                    android:contentDescription="@string/star_icon"/>
+                    android:contentDescription="@string/star_icon_description"/>
 
                 <TextView
                     android:id="@+id/stars_count"
@@ -124,7 +124,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/star_icon"
                     android:textColor="?attr/colorOnPrimary"
                     android:textSize="16sp"
-                    android:text="@string/stars"/>
+                    android:text="@string/stars_caption"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -143,7 +143,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:src="@drawable/ic_fork"
                     app:tint="@color/git_lime"
-                    android:contentDescription="@string/fork_icon"/>
+                    android:contentDescription="@string/fork_icon_description"/>
 
                 <TextView
                     android:id="@+id/forks_count"
@@ -167,7 +167,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/fork_icon"
                     android:textColor="?attr/colorOnPrimary"
                     android:textSize="16sp"
-                    android:text="@string/forks"/>
+                    android:text="@string/forks_caption"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -186,7 +186,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:src="@drawable/ic_eye"
                     app:tint="@color/git_diamond"
-                    android:contentDescription="@string/watch_icon"/>
+                    android:contentDescription="@string/watch_icon_description"/>
 
                 <TextView
                     android:id="@+id/watches_count"
@@ -210,7 +210,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/watch_icon"
                     android:textColor="?attr/colorOnPrimary"
                     android:textSize="16sp"
-                    android:text="@string/watchers"/>
+                    android:text="@string/watchers_caption"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

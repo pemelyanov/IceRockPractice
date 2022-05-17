@@ -1,14 +1,11 @@
 package com.emelyanov.icerockpractice.modules.auth.presentation
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,9 +14,6 @@ import com.emelyanov.icerockpractice.R
 import com.emelyanov.icerockpractice.databinding.FragmentAuthBinding
 import com.emelyanov.icerockpractice.modules.auth.domain.AuthViewModel
 import com.emelyanov.icerockpractice.shared.domain.utils.bindTextTwoWay
-import com.emelyanov.markdownview.MarkdownView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,7 +35,7 @@ class AuthFragment : Fragment() {
             viewModel.state.observe(viewLifecycleOwner) {
                 authButtonProgressbar.visibility = if(it is AuthViewModel.State.Loading) android.view.View.VISIBLE else android.view.View.GONE
                 authButton.isEnabled = it !is AuthViewModel.State.Loading
-                authButton.text = if(it is AuthViewModel.State.Loading) "" else getText(com.emelyanov.icerockpractice.R.string.sign_in)
+                authButton.text = if(it is AuthViewModel.State.Loading) "" else getText(com.emelyanov.icerockpractice.R.string.sign_in_button)
                 tokenField.error = if(it is AuthViewModel.State.InvalidInput) it.reason else ""
             }
 
@@ -63,9 +57,9 @@ class AuthFragment : Fragment() {
                 viewModel.actions.collect {
                     if(it is AuthViewModel.Action.ShowError) {
                         AlertDialog.Builder(requireContext(), R.style.GitAlertDialog)
-                            .setPositiveButton("Ok") { d, _ -> }
+                            .setPositiveButton(getString(R.string.error_dialog_positive_button)) { d, _ -> }
                             .setMessage(it.message)
-                            .setTitle("Error")
+                            .setTitle(getString(R.string.error_dialog_title))
                             .create()
                             .show()
                     }

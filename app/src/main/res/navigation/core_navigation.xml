@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/authorizationFragment"
         android:name="com.emelyanov.icerockpractice.modules.auth.presentation.AuthFragment"
-        android:label="fragment_authorization"
+        android:label="@string/authorization_fragment_caption"
         tools:layout="@layout/fragment_auth" >
         <action
             android:id="@+id/navigateToList"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/repositoryDetailsFragment"
         android:name="com.emelyanov.icerockpractice.modules.repos.modules.details.presentation.DetailInfoFragment"
-        android:label="fragment_repo_details"
+        android:label=""
         tools:layout="@layout/fragment_repo_details" >
         <argument
             android:name="repoId"
@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/repositoriesListFragment"
         android:name="com.emelyanov.icerockpractice.modules.repos.modules.list.presentation.RepositoriesListFragment"
-        android:label="Repositories"
+        android:label="@string/repositories_fragment_title"
         tools:layout="@layout/fragment_repositories">
         <action
             android:id="@+id/navigateToDetails"
