@@ -1,8 +1,12 @@
 package com.emelyanov.markdownview
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.html.HtmlGenerator
 import org.intellij.markdown.parser.MarkdownParser
@@ -32,6 +36,15 @@ class MarkdownView(
             blockNetworkImage = false
             loadsImagesAutomatically = true
         }
+        webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                context.startActivity(Intent(Intent.ACTION_VIEW, request?.url))
+                return true
+            }
+        }
     }
 
     /**
@@ -46,6 +59,7 @@ class MarkdownView(
 
         loadMarkdownHtml(html)
     }
+
 
     /**
      * Displays rendered to html markdown with default dark github theme.

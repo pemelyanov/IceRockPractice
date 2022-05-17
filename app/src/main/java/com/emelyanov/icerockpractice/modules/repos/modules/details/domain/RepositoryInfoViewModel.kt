@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.emelyanov.icerockpractice.modules.auth.domain.AuthViewModel
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoDetailsUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoReadmeUseCase
+import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.ReplaceReadmeLocalUrisUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.RepositoriesListViewModel
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
@@ -16,6 +17,7 @@ import com.emelyanov.icerockpractice.shared.domain.utils.NotFoundException
 import com.emelyanov.icerockpractice.shared.domain.utils.ServerNotRespondingException
 import com.emelyanov.icerockpractice.shared.domain.utils.UnauthorizedException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,52 +26,28 @@ class RepositoryInfoViewModel
 @Inject
 constructor(
     private val getRepoDetails: GetRepoDetailsUseCase,
-    private val getRepoReadme: GetRepoReadmeUseCase
+    private val getRepoReadme: GetRepoReadmeUseCase,
+    private val replaceReadmeLocalUris: ReplaceReadmeLocalUrisUseCase
 ) : ViewModel() {
     private val _state: MutableLiveData<State> = MutableLiveData(State.Loading)
     val state: LiveData<State>
         get() = _state
 
     fun loadInfo(repoId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.postValue(State.Loading)
 
             try {
-                getRepoDetails(repoId).let {
+                getRepoDetails(repoId).let { repoDetails ->
 
                     val newState = State.Loaded(
-                        githubRepo = it,
+                        githubRepo = repoDetails,
                         readmeState = ReadmeState.Loading
                     )
 
                     _state.postValue(newState)
 
-                    Log.d("MarkdownError", "Before")
-                    try {
-                        getRepoReadme(
-                            owner = newState.githubRepo.owner,
-                            repo = newState.githubRepo.name
-                        ).let { markdown ->
-                                _state.postValue(newState.copy(
-                                    readmeState = ReadmeState.Loaded(markdown)
-                                )
-                            )
-                        }
-                    } catch (ex: NotFoundException) {
-                        _state.postValue(newState.copy(readmeState = ReadmeState.Empty))
-                    } catch (ex: UnauthorizedException) {
-                        _state.postValue(newState.copy(readmeState = ReadmeState.Error("Invalid token.")))
-                    } catch (ex: ServerNotRespondingException) {
-                        _state.postValue(newState.copy(readmeState = ReadmeState.Error("Server not responding")))
-                    } catch (ex: ConnectionErrorException) {
-                        _state.postValue(newState.copy(readmeState = ReadmeState.ConnectionError))
-                    } catch (ex: Exception) {
-                        _state.postValue(
-                            newState.copy(
-                                readmeState = ReadmeState.Error(ex.message ?: "Undescribed error: ${ex::class.java}")
-                            )
-                        )
-                    }
+                    loadReadme(newState)
                 }
             } catch (ex: UnauthorizedException) {
                 _state.postValue(State.Error("Invalid token."))
@@ -80,6 +58,41 @@ constructor(
             } catch (ex: Exception) {
                 _state.postValue(State.Error(ex.message ?: "Undescribed error: ${ex::class.java}"))
             }
+        }
+    }
+
+    private suspend fun loadReadme(state: State.Loaded) {
+        try {
+            getRepoReadme(
+                owner = state.githubRepo.owner,
+                repo = state.githubRepo.name
+            ).let { markdown ->
+                replaceReadmeLocalUris(
+                    owner = state.githubRepo.owner,
+                    repo = state.githubRepo.name,
+                    readme = markdown
+                ).let { processedReadme ->
+                    _state.postValue(
+                        state.copy(
+                            readmeState = ReadmeState.Loaded(processedReadme)
+                        )
+                    )
+                }
+            }
+        } catch (ex: NotFoundException) {
+            _state.postValue(state.copy(readmeState = ReadmeState.Empty))
+        } catch (ex: UnauthorizedException) {
+            _state.postValue(state.copy(readmeState = ReadmeState.Error("Invalid token.")))
+        } catch (ex: ServerNotRespondingException) {
+            _state.postValue(state.copy(readmeState = ReadmeState.Error("Server not responding")))
+        } catch (ex: ConnectionErrorException) {
+            _state.postValue(state.copy(readmeState = ReadmeState.ConnectionError))
+        } catch (ex: Exception) {
+            _state.postValue(
+                state.copy(
+                    readmeState = ReadmeState.Error(ex.message ?: "Undescribed error: ${ex::class.java}")
+                )
+            )
         }
     }
 
