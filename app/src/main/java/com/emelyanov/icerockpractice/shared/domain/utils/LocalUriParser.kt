@@ -6,7 +6,6 @@ fun parseLocalUris(document: String): List<UriPair> {
     val innerRegex = Regex("""((\w*|[_,-,\,.]*)\/)*(\w*|[_,-,\,.])\.(png|jpg|jpeg|gif)""")
     val regex = Regex("""(src=\"${innerRegex.pattern}\")|(!\[.*\]\(${innerRegex.pattern}\))""")
     return regex.findAll(document).map {
-        Log.d("Uri parse", it.value)
         UriPair(
             entry = it.value,
             uri = innerRegex.find(it.value)!!.value

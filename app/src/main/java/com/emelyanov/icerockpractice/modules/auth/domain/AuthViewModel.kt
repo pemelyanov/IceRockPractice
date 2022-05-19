@@ -61,7 +61,6 @@ constructor(
             } catch (ex: Exception) {
                 _state.postValue(State.Idle)
                 _actions.send(Action.ShowError(ex.message ?: "Undescribed error: ${ex::class.java}"))
-                Log.d("SignIn Error", ex.message ?: "Undescribed error: ${ex::class.java}")
             }
         }
     }
