@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.emelyanov.icerockpractice.databinding.FragmentRepoDetailsBinding
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.RepositoryInfoViewModel
+import com.emelyanov.icerockpractice.modules.repos.modules.details.utils.NavigationConsts
 import com.emelyanov.icerockpractice.shared.domain.utils.supportActionBar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,19 +21,11 @@ private const val FIRST_ENTERED_KEY = "firstEnteredKey"
 @AndroidEntryPoint
 class DetailInfoFragment : Fragment() {
     private lateinit var binding: FragmentRepoDetailsBinding
-    private val viewModel: RepositoryInfoViewModel by viewModels()
 
     private val repoName: String
-        get() = requireNotNull(requireArguments().getString(REPO_NAME_KEY))
-    private val repoOwner: String
-        get() = requireNotNull(requireArguments().getString(REPO_OWNER_KEY))
+        get() = requireNotNull(requireArguments().getString(NavigationConsts.REPO_NAME_KEY))
 
-    private var firstEntered = true
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        firstEntered = savedInstanceState?.getBoolean(FIRST_ENTERED_KEY) ?: true
-    }
+    private val viewModel: RepositoryInfoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,13 +46,8 @@ class DetailInfoFragment : Fragment() {
             }
         }
 
-        binding.repoConnectionErrorState.retryButton.setOnClickListener { viewModel.loadInfo(repoOwner, repoName) }
-        binding.repoErrorState.refreshButton.setOnClickListener { viewModel.loadInfo(repoOwner, repoName) }
-
-        if(firstEntered) {
-            viewModel.loadInfo(repoOwner, repoName)
-            firstEntered = false
-        }
+        binding.repoConnectionErrorState.retryButton.setOnClickListener { viewModel.loadInfo() }
+        binding.repoErrorState.refreshButton.setOnClickListener { viewModel.loadInfo() }
 
         return binding.root
     }
@@ -116,17 +104,12 @@ class DetailInfoFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(FIRST_ENTERED_KEY, firstEntered)
-    }
-
     companion object {
-        private const val REPO_NAME_KEY = "repoNameKey"
-        private const val REPO_OWNER_KEY = "repoOwnerKey"
-
         fun createArguments(repoOwner: String, repoName: String): Bundle {
-            return bundleOf(REPO_OWNER_KEY to repoOwner, REPO_NAME_KEY to repoName)
+            return bundleOf(
+                NavigationConsts.REPO_OWNER_KEY to repoOwner,
+                NavigationConsts.REPO_NAME_KEY to repoName
+            )
         }
     }
 }

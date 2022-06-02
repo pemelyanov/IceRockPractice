@@ -1,14 +1,13 @@
 package com.emelyanov.icerockpractice.modules.repos.modules.details.domain
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.emelyanov.icerockpractice.modules.auth.domain.AuthViewModel
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoDetailsUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoReadmeUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.ReplaceReadmeLocalUrisUseCase
+import com.emelyanov.icerockpractice.modules.repos.modules.details.presentation.DetailInfoFragment
+import com.emelyanov.icerockpractice.modules.repos.modules.details.utils.NavigationConsts
 import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.RepositoriesListViewModel
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
@@ -16,6 +15,8 @@ import com.emelyanov.icerockpractice.shared.domain.utils.ConnectionErrorExceptio
 import com.emelyanov.icerockpractice.shared.domain.utils.NotFoundException
 import com.emelyanov.icerockpractice.shared.domain.utils.ServerNotRespondingException
 import com.emelyanov.icerockpractice.shared.domain.utils.UnauthorizedException
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,13 +28,21 @@ class RepositoryInfoViewModel
 constructor(
     private val getRepoDetails: GetRepoDetailsUseCase,
     private val getRepoReadme: GetRepoReadmeUseCase,
-    private val replaceReadmeLocalUris: ReplaceReadmeLocalUrisUseCase
+    private val replaceReadmeLocalUris: ReplaceReadmeLocalUrisUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _state: MutableLiveData<State> = MutableLiveData(State.Loading)
     val state: LiveData<State>
         get() = _state
 
-    fun loadInfo(owner: String, repo: String) {
+    init {
+        loadInfo()
+    }
+
+    fun loadInfo() {
+        val owner = requireNotNull(savedStateHandle.get<String>(NavigationConsts.REPO_OWNER_KEY))
+        val repo = requireNotNull(savedStateHandle.get<String>(NavigationConsts.REPO_NAME_KEY))
+
         viewModelScope.launch(Dispatchers.IO) {
             _state.postValue(State.Loading)
 
