@@ -23,7 +23,10 @@
         android:label=""
         tools:layout="@layout/fragment_repo_details" >
         <argument
-            android:name="repoId"
+            android:name="repo"
+            app:argType="string" />
+        <argument
+            android:name="owner"
             app:argType="string" />
     </fragment>
     <fragment

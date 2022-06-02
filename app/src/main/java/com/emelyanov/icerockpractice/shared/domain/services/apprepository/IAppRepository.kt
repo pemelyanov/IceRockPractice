@@ -7,7 +7,7 @@ import com.emelyanov.icerockpractice.shared.domain.models.UserInfo
 interface IAppRepository {
         suspend fun getRepositories(): List<Repo>
 
-        suspend fun getRepository(repoId: String): RepoDetails
+        suspend fun getRepository(owner: String, repo: String): RepoDetails
 
         suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String = ""): String
 

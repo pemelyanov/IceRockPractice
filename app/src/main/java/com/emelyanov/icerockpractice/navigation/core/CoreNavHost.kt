@@ -29,7 +29,13 @@ fun MainActivity.launchNavHost(
                     is CoreDestinations.Authentication -> coreNavController.navigate(R.id.navigateToAuth)
                     is CoreDestinations.RepositoriesList -> coreNavController.navigate(R.id.navigateToList)
                     is CoreDestinations.RepositoryDetails -> {
-                        coreNavController.navigate(R.id.navigateToDetails, DetailInfoFragment.createArguments(destination.repo))
+                        coreNavController.navigate(
+                            R.id.navigateToDetails,
+                            DetailInfoFragment.createArguments(
+                                destination.owner,
+                                destination.repo
+                            )
+                        )
                     }
                 }
             }

@@ -60,7 +60,7 @@ constructor(
         }
     }
 
-    fun onRepoClick(repoId: String) = navigateToDetails(repoId)
+    fun onRepoClick(owner: String, repo: String) = navigateToDetails(owner, repo)
 
     sealed interface State {
         object Loading : State

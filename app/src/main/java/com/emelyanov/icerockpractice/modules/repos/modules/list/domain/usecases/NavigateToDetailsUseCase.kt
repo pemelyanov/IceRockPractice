@@ -10,7 +10,7 @@ class NavigateToDetailsUseCase
 constructor(
     private val coreNavProvider: CoreNavProvider
 ) {
-    operator fun invoke(repoId: String) {
-        coreNavProvider.requestNavigate(CoreDestinations.RepositoryDetails(repoId))
+    operator fun invoke(owner: String, repo: String) {
+        coreNavProvider.requestNavigate(CoreDestinations.RepositoryDetails(owner, repo))
     }
 }

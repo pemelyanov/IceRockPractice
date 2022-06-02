@@ -3,6 +3,7 @@ package com.emelyanov.icerockpractice.modules.repos.modules.details.presentation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,8 +21,11 @@ private const val FIRST_ENTERED_KEY = "firstEnteredKey"
 class DetailInfoFragment : Fragment() {
     private lateinit var binding: FragmentRepoDetailsBinding
     private val viewModel: RepositoryInfoViewModel by viewModels()
-    private val repoId: String
-        get() = requireNotNull(requireArguments().getString(REPO_ID_KEY))
+
+    private val repoName: String
+        get() = requireNotNull(requireArguments().getString(REPO_NAME_KEY))
+    private val repoOwner: String
+        get() = requireNotNull(requireArguments().getString(REPO_OWNER_KEY))
 
     private var firstEntered = true
 
@@ -37,7 +41,7 @@ class DetailInfoFragment : Fragment() {
     ): View {
         binding = FragmentRepoDetailsBinding.inflate(inflater,container,false)
 
-        supportActionBar?.title = repoId
+        supportActionBar?.title = repoName
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             with(binding) {
@@ -49,11 +53,11 @@ class DetailInfoFragment : Fragment() {
             }
         }
 
-        binding.repoConnectionErrorState.retryButton.setOnClickListener { viewModel.loadInfo(repoId) }
-        binding.repoErrorState.refreshButton.setOnClickListener { viewModel.loadInfo(repoId) }
+        binding.repoConnectionErrorState.retryButton.setOnClickListener { viewModel.loadInfo(repoOwner, repoName) }
+        binding.repoErrorState.refreshButton.setOnClickListener { viewModel.loadInfo(repoOwner, repoName) }
 
         if(firstEntered) {
-            viewModel.loadInfo(repoId)
+            viewModel.loadInfo(repoOwner, repoName)
             firstEntered = false
         }
 
@@ -118,10 +122,11 @@ class DetailInfoFragment : Fragment() {
     }
 
     companion object {
-        private const val REPO_ID_KEY = "repoIdKey"
+        private const val REPO_NAME_KEY = "repoNameKey"
+        private const val REPO_OWNER_KEY = "repoOwnerKey"
 
-        fun createArguments(repoId: String): Bundle {
-            return bundleOf(REPO_ID_KEY to repoId)
+        fun createArguments(repoOwner: String, repoName: String): Bundle {
+            return bundleOf(REPO_OWNER_KEY to repoOwner, REPO_NAME_KEY to repoName)
         }
     }
 }

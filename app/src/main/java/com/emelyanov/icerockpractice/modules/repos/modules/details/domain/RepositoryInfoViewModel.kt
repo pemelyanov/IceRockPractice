@@ -33,12 +33,12 @@ constructor(
     val state: LiveData<State>
         get() = _state
 
-    fun loadInfo(repoId: String) {
+    fun loadInfo(owner: String, repo: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.postValue(State.Loading)
 
             try {
-                getRepoDetails(repoId).let { repoDetails ->
+                getRepoDetails(owner, repo).let { repoDetails ->
 
                     val newState = State.Loaded(
                         githubRepo = repoDetails,

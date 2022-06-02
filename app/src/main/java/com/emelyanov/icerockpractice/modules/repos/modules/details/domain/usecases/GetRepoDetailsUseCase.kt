@@ -10,6 +10,6 @@ class GetRepoDetailsUseCase
 constructor(
     private val appRepository: IAppRepository
 ) {
-    suspend operator fun invoke(repoId: String) : RepoDetails
-    = appRepository.getRepository(repoId)
+    suspend operator fun invoke(owner: String, repo: String) : RepoDetails
+    = appRepository.getRepository(owner, repo)
 }

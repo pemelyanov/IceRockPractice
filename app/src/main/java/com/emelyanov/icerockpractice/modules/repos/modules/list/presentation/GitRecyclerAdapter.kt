@@ -1,14 +1,17 @@
 package com.emelyanov.icerockpractice.modules.repos.modules.list.presentation
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.emelyanov.icerockpractice.databinding.RepoListItemBinding
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 
+typealias NavigationFunc = (owner: String, repo: String) -> Unit
+
 class GitRecyclerAdapter(
-    private val onRepoClick: (String) -> Unit
+    private val onRepoClick: NavigationFunc
 ) : RecyclerView.Adapter<RepoItemViewHolder>()  {
 
     var items: List<Repo> = emptyList()
@@ -27,7 +30,7 @@ class GitRecyclerAdapter(
         val item = items[position]
 
         with(holder.binding) {
-            root.setOnClickListener { onRepoClick(item.name) }
+            root.setOnClickListener { onRepoClick(item.owner, item.name) }
             repoTitle.text = item.name
             repoLang.text = item.language
             repoDescription.text = item.description

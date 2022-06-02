@@ -12,7 +12,7 @@ interface IGitHubApi {
         @Header("Authorization") token: String
     ) : UserInfoResponse
 
-    @GET("/user/repos?per_page=10&page=1&type=owner&sort=created&direction=desc")
+    @GET("/user/repos?per_page=10&page=1&type=all&sort=created&direction=desc")
     suspend fun getRepositories(
         @Header("Authorization") token: String
     ) : List<RepositoryShortResponse>

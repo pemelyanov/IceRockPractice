@@ -1,6 +1,7 @@
 package com.emelyanov.icerockpractice.shared.domain.services.apprepository
 
 import android.util.Base64
+import android.util.Log
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
 import com.emelyanov.icerockpractice.shared.domain.models.UserInfo
@@ -30,12 +31,12 @@ class AppRepository(
         }
     }
 
-    override suspend fun getRepository(repoId: String): RepoDetails
+    override suspend fun getRepository(owner: String, repo: String): RepoDetails
     = gitRequestWrapper {
         gitHubApi.getRepoDetails(
             token = getAuthHeader(),
-            owner = keyValueStorage.userName ?: "",
-            repo = repoId
+            owner = owner,
+            repo = repo
         )
     }.toRepoDetails()
 
