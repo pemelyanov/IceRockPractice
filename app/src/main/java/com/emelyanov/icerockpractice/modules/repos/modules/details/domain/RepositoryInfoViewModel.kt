@@ -84,6 +84,8 @@ constructor(
                 owner = state.githubRepo.owner,
                 repo = state.githubRepo.name
             ).let { markdown ->
+
+                //Replacing local image uri`s by global uri`s
                 replaceReadmeLocalUris(
                     owner = state.githubRepo.owner,
                     repo = state.githubRepo.name,
