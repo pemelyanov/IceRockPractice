@@ -33,7 +33,7 @@ class AuthFragment : Fragment() {
 
         with(binding){
             viewModel.state.observe(viewLifecycleOwner) {
-                authButtonProgressbar.visibility = if(it is AuthViewModel.State.Loading) android.view.View.VISIBLE else android.view.View.GONE
+                authButtonProgressbar.visibility = if(it is AuthViewModel.State.Loading) View.VISIBLE else View.GONE
                 authButton.isEnabled = it !is AuthViewModel.State.Loading
                 authButton.text = if(it is AuthViewModel.State.Loading) "" else getText(com.emelyanov.icerockpractice.R.string.sign_in_button)
                 tokenField.error = if(it is AuthViewModel.State.InvalidInput) it.reason else ""
@@ -53,11 +53,11 @@ class AuthFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.actions.collect {
                     if(it is AuthViewModel.Action.ShowError) {
                         AlertDialog.Builder(requireContext(), R.style.GitAlertDialog)
-                            .setPositiveButton(getString(R.string.error_dialog_positive_button)) { d, _ -> }
+                            .setPositiveButton(getString(R.string.error_dialog_positive_button)) { _, _ -> }
                             .setMessage(it.message)
                             .setTitle(getString(R.string.error_dialog_title))
                             .create()

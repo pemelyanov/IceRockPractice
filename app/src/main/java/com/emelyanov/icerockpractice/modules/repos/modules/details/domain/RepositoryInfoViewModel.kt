@@ -3,6 +3,7 @@ package com.emelyanov.icerockpractice.modules.repos.modules.details.domain
 import android.util.Log
 import androidx.lifecycle.*
 import com.emelyanov.icerockpractice.modules.auth.domain.AuthViewModel
+import com.emelyanov.icerockpractice.modules.auth.domain.usecases.GetEnterTheTokenMessageUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoDetailsUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoReadmeUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.ReplaceReadmeLocalUrisUseCase
@@ -11,6 +12,10 @@ import com.emelyanov.icerockpractice.modules.repos.modules.details.utils.Navigat
 import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.RepositoriesListViewModel
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetConnectionErrorStringUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetInvalidTokenMessageUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetServerNotRespondingStringUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetUndescribedErrorMessageUseCase
 import com.emelyanov.icerockpractice.shared.domain.utils.ConnectionErrorException
 import com.emelyanov.icerockpractice.shared.domain.utils.NotFoundException
 import com.emelyanov.icerockpractice.shared.domain.utils.ServerNotRespondingException
@@ -29,7 +34,10 @@ constructor(
     private val getRepoDetails: GetRepoDetailsUseCase,
     private val getRepoReadme: GetRepoReadmeUseCase,
     private val replaceReadmeLocalUris: ReplaceReadmeLocalUrisUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val getServerNotRespondingString: GetServerNotRespondingStringUseCase,
+    private val getUndescribedErrorString: GetUndescribedErrorMessageUseCase,
+    private val getInvalidTokenString: GetInvalidTokenMessageUseCase
 ) : ViewModel() {
     private val _state: MutableLiveData<State> = MutableLiveData(State.Loading)
     val state: LiveData<State>
@@ -59,13 +67,13 @@ constructor(
                     loadReadme(newState)
                 }
             } catch (ex: UnauthorizedException) {
-                _state.postValue(State.Error("Invalid token."))
+                _state.postValue(State.Error(getInvalidTokenString()))
             } catch (ex: ServerNotRespondingException) {
-                _state.postValue(State.Error("Server not responding..."))
+                _state.postValue(State.Error(getServerNotRespondingString()))
             } catch (ex: ConnectionErrorException) {
                 _state.postValue(State.ConnectionError)
             } catch (ex: Exception) {
-                _state.postValue(State.Error(ex.message ?: "Undescribed error: ${ex::class.java}"))
+                _state.postValue(State.Error(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
             }
         }
     }
@@ -91,15 +99,15 @@ constructor(
         } catch (ex: NotFoundException) {
             _state.postValue(state.copy(readmeState = ReadmeState.Empty))
         } catch (ex: UnauthorizedException) {
-            _state.postValue(state.copy(readmeState = ReadmeState.Error("Invalid token.")))
+            _state.postValue(state.copy(readmeState = ReadmeState.Error(getInvalidTokenString())))
         } catch (ex: ServerNotRespondingException) {
-            _state.postValue(state.copy(readmeState = ReadmeState.Error("Server not responding")))
+            _state.postValue(state.copy(readmeState = ReadmeState.Error(getServerNotRespondingString())))
         } catch (ex: ConnectionErrorException) {
             _state.postValue(state.copy(readmeState = ReadmeState.ConnectionError))
         } catch (ex: Exception) {
             _state.postValue(
                 state.copy(
-                    readmeState = ReadmeState.Error(ex.message ?: "Undescribed error: ${ex::class.java}")
+                    readmeState = ReadmeState.Error(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}")
                 )
             )
         }

@@ -5,11 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emelyanov.icerockpractice.modules.auth.domain.usecases.GetEnterTheTokenMessageUseCase
 import com.emelyanov.icerockpractice.modules.auth.domain.usecases.GetTokenUseCase
 import com.emelyanov.icerockpractice.modules.auth.domain.usecases.NavigateToRepositoriesListUseCase
 import com.emelyanov.icerockpractice.modules.auth.domain.usecases.SignInUseCase
 import com.emelyanov.icerockpractice.navigation.core.CoreDestinations
 import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetConnectionErrorStringUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetServerNotRespondingStringUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetUndescribedErrorMessageUseCase
 import com.emelyanov.icerockpractice.shared.domain.utils.ConnectionErrorException
 import com.emelyanov.icerockpractice.shared.domain.utils.ServerNotRespondingException
 import com.emelyanov.icerockpractice.shared.domain.utils.UnauthorizedException
@@ -26,7 +30,11 @@ class AuthViewModel
 constructor(
     private val getToken: GetTokenUseCase,
     private val signIn: SignInUseCase,
-    private val navigateToRepositoriesList: NavigateToRepositoriesListUseCase
+    private val navigateToRepositoriesList: NavigateToRepositoriesListUseCase,
+    private val getServerNotRespondingString: GetServerNotRespondingStringUseCase,
+    private val getConnectionErrorString: GetConnectionErrorStringUseCase,
+    private val getUndescribedErrorString: GetUndescribedErrorMessageUseCase,
+    private val getEnterTheTokenString: GetEnterTheTokenMessageUseCase
 ) : ViewModel() {
     val token: MutableLiveData<String> = MutableLiveData("")
 
@@ -52,15 +60,15 @@ constructor(
                 navigateToRepositoriesList()
             } catch (ex: ServerNotRespondingException) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError("Server not responding..."))
+                _actions.send(Action.ShowError(getServerNotRespondingString()))
             } catch (ex: ConnectionErrorException) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError("Connection error."))
+                _actions.send(Action.ShowError(getConnectionErrorString()))
             } catch (ex: UnauthorizedException) {
                 _state.postValue(State.InvalidInput(ex.message))
             } catch (ex: Exception) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(ex.message ?: "Undescribed error: ${ex::class.java}"))
+                _actions.send(Action.ShowError(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
             }
         }
     }
@@ -70,7 +78,7 @@ constructor(
             _state.postValue(State.Loading)
             try {
                 if(token.value.isNullOrEmpty()) {
-                    _state.postValue(State.InvalidInput("Enter the token."))
+                    _state.postValue(State.InvalidInput(getEnterTheTokenString()))
                     return@launch
                 }
 
@@ -80,13 +88,13 @@ constructor(
                 _state.postValue(State.InvalidInput(ex.message))
             } catch (ex: ServerNotRespondingException) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError("Server not responding..."))
+                _actions.send(Action.ShowError(getServerNotRespondingString()))
             } catch (ex: ConnectionErrorException) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError("Connection error."))
+                _actions.send(Action.ShowError(getConnectionErrorString()))
             } catch (ex: Exception) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(ex.message ?: "Undescribed error: ${ex::class.java}"))
+                _actions.send(Action.ShowError(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
             }
         }
     }

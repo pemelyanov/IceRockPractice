@@ -31,4 +31,9 @@
     <string name="error_dialog_title">Error</string>
     <string name="repositories_fragment_title">Repositories</string>
     <string name="authorization_fragment_caption">Authorization</string>
+    <string name="server_not_responding_message">Server not responding…</string>
+    <string name="connection_error_message">Connection error.</string>
+    <string name="undescribed_error_message">Undescribed error:</string>
+    <string name="enter_the_token_message">Enter the token.</string>
+    <string name="invalid_token_message">Invalid token.</string>
 </resources>

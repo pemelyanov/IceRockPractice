@@ -11,6 +11,9 @@ import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.usecases.
 import com.emelyanov.icerockpractice.navigation.core.CoreDestinations
 import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetInvalidTokenMessageUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetServerNotRespondingStringUseCase
+import com.emelyanov.icerockpractice.shared.domain.usecases.GetUndescribedErrorMessageUseCase
 import com.emelyanov.icerockpractice.shared.domain.utils.ConnectionErrorException
 import com.emelyanov.icerockpractice.shared.domain.utils.ServerNotRespondingException
 import com.emelyanov.icerockpractice.shared.domain.utils.UnauthorizedException
@@ -24,7 +27,10 @@ class RepositoriesListViewModel
 @Inject
 constructor(
     private val getRepos: GetReposUseCase,
-    private val navigateToDetails: NavigateToDetailsUseCase
+    private val navigateToDetails: NavigateToDetailsUseCase,
+    private val getServerNotRespondingString: GetServerNotRespondingStringUseCase,
+    private val getUndescribedErrorString: GetUndescribedErrorMessageUseCase,
+    private val getInvalidTokenString: GetInvalidTokenMessageUseCase
 ) : ViewModel() {
     private val _state: MutableLiveData<State> = MutableLiveData(State.Loading)
     val state: LiveData<State>
@@ -49,13 +55,13 @@ constructor(
                         )
                 }
             } catch (ex: UnauthorizedException) {
-                _state.postValue(State.Error("Invalid token."))
+                _state.postValue(State.Error(getInvalidTokenString()))
             } catch (ex: ServerNotRespondingException) {
-                _state.postValue(State.Error("Server not responding..."))
+                _state.postValue(State.Error(getServerNotRespondingString()))
             } catch (ex: ConnectionErrorException) {
                 _state.postValue(State.ConnectionError)
             } catch (ex: Exception) {
-                _state.postValue(State.Error(ex.message ?: "Undescribed error: ${ex::class.java}"))
+                _state.postValue(State.Error(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
             }
         }
     }
