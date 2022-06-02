@@ -42,7 +42,7 @@ constructor(
     val state: LiveData<State>
         get() = _state
 
-    private val _actions: Channel<Action> = Channel()
+    private val _actions: Channel<Action> = Channel(Channel.BUFFERED)
     val actions: Flow<Action>
         get() = _actions.receiveAsFlow()
 
