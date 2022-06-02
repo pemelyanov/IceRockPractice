@@ -36,4 +36,5 @@
     <string name="undescribed_error_message">Undescribed error:</string>
     <string name="enter_the_token_message">Enter the token.</string>
     <string name="invalid_token_message">Invalid token.</string>
+    <string name="no_readme_text">No README.md</string>
 </resources>

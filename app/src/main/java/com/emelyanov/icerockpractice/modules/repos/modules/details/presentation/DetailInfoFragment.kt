@@ -10,13 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import com.emelyanov.icerockpractice.R
 import com.emelyanov.icerockpractice.databinding.FragmentRepoDetailsBinding
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.RepositoryInfoViewModel
 import com.emelyanov.icerockpractice.modules.repos.modules.details.utils.NavigationConsts
 import com.emelyanov.icerockpractice.shared.domain.utils.supportActionBar
 import dagger.hilt.android.AndroidEntryPoint
-
-private const val FIRST_ENTERED_KEY = "firstEnteredKey"
 
 @AndroidEntryPoint
 class DetailInfoFragment : Fragment() {
@@ -54,53 +53,69 @@ class DetailInfoFragment : Fragment() {
 
     private fun handleStateForDetailsBlock(state: RepositoryInfoViewModel.State) {
         with(binding) {
+            detailsScrollContainer.visibility = if(state is RepositoryInfoViewModel.State.Loaded) View.VISIBLE else View.GONE
+            repoLink.text = if(state is RepositoryInfoViewModel.State.Loaded) state.githubRepo.url else null
+            repoLink.setOnClickListener {
+                if(state is RepositoryInfoViewModel.State.Loaded) viewModel.onLinkClick(state.githubRepo.url)
+            }
+            licenseName.text = if(state is RepositoryInfoViewModel.State.Loaded) state.githubRepo.license else null
+            starsCount.text = if(state is RepositoryInfoViewModel.State.Loaded) state.githubRepo.stargazersCount.toString() else null
+            forksCount.text = if(state is RepositoryInfoViewModel.State.Loaded) state.githubRepo.forksCount.toString() else null
+            watchesCount.text = if(state is RepositoryInfoViewModel.State.Loaded) state.githubRepo.watchersCount.toString() else null
+
             if(state is RepositoryInfoViewModel.State.Loaded) {
-                detailsScrollContainer.visibility = View.VISIBLE
-                repoLink.text = state.githubRepo.url
-                repoLink.setOnClickListener {
-                    val uri = Uri.parse(state.githubRepo.url)
-                    Intent(Intent.ACTION_VIEW).apply {
-                        data = uri
-                        startActivity(this)
-                    }
+                readmeProgressbar.visibility = if(state.readmeState is RepositoryInfoViewModel.ReadmeState.Loading) View.VISIBLE else View.GONE
+                readmeView.visibility = when (state.readmeState) {
+                    is RepositoryInfoViewModel.ReadmeState.Loaded -> View.VISIBLE
+                    is RepositoryInfoViewModel.ReadmeState.Empty -> View.VISIBLE
+                    else -> View.GONE
                 }
 
-                licenseName.text = state.githubRepo.license
-                starsCount.text = state.githubRepo.stargazersCount.toString()
-                forksCount.text = state.githubRepo.forksCount.toString()
-                watchesCount.text = state.githubRepo.watchersCount.toString()
-
-                readmeProgressbar.visibility = if(state.readmeState is RepositoryInfoViewModel.ReadmeState.Loading) View.VISIBLE else View.GONE
-                if(state.readmeState is RepositoryInfoViewModel.ReadmeState.Loaded) {
-                    readmeView.visibility = View.VISIBLE
-                    readmeView.loadMarkdownText(state.readmeState.markdown)
-                } else if(state.readmeState is RepositoryInfoViewModel.ReadmeState.Empty) {
-                    readmeView.visibility = View.VISIBLE
-                    readmeView.loadMarkdownText("No README.md")
-                } else { readmeView.visibility = View.GONE }
-            } else { binding.detailsScrollContainer.visibility = View.GONE }
+                readmeView.loadMarkdownText(
+                    when (state.readmeState) {
+                        is RepositoryInfoViewModel.ReadmeState.Loaded -> state.readmeState.markdown
+                        is RepositoryInfoViewModel.ReadmeState.Empty -> getString(R.string.no_readme_text)
+                        else -> null
+                    }
+                )
+            }
         }
     }
 
     private fun handleStateForNoConnectionError(state: RepositoryInfoViewModel.State) {
         with(binding) {
-            if(state is RepositoryInfoViewModel.State.ConnectionError ||
+            repoConnectionErrorState.root.visibility = if(state is RepositoryInfoViewModel.State.ConnectionError ||
                 state is RepositoryInfoViewModel.State.Loaded &&
                 state.readmeState is RepositoryInfoViewModel.ReadmeState.ConnectionError) {
-                repoConnectionErrorState.root.visibility = View.VISIBLE
-            } else { repoErrorState.root.visibility = View.GONE }
+
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
     }
 
     private fun handleStateForError(state: RepositoryInfoViewModel.State) {
         with(binding) {
-            if(state is RepositoryInfoViewModel.State.Error) {
-                repoErrorState.root.visibility = View.VISIBLE
-                repoErrorState.errorDescription.text = state.error
-            } else if(state is RepositoryInfoViewModel.State.Loaded && state.readmeState is RepositoryInfoViewModel.ReadmeState.Error) {
-                repoErrorState.root.visibility = View.VISIBLE
-                repoErrorState.errorDescription.text = state.readmeState.error
-            } else { repoErrorState.root.visibility = View.GONE }
+            repoErrorState.root.visibility = if(state is RepositoryInfoViewModel.State.Error) {
+                View.VISIBLE
+            } else if(state is RepositoryInfoViewModel.State.Loaded &&
+                state.readmeState is RepositoryInfoViewModel.ReadmeState.Error) {
+
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
+            repoErrorState.errorDescription.text = if(state is RepositoryInfoViewModel.State.Error) {
+                state.error
+            } else if(state is RepositoryInfoViewModel.State.Loaded &&
+                state.readmeState is RepositoryInfoViewModel.ReadmeState.Error) {
+
+                state.readmeState.error
+            } else {
+                null
+            }
         }
     }
 

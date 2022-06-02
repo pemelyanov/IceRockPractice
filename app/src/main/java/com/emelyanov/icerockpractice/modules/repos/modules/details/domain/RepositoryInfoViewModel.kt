@@ -6,6 +6,7 @@ import com.emelyanov.icerockpractice.modules.auth.domain.AuthViewModel
 import com.emelyanov.icerockpractice.modules.auth.domain.usecases.GetEnterTheTokenMessageUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoDetailsUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.GetRepoReadmeUseCase
+import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.OpenUrlUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases.ReplaceReadmeLocalUrisUseCase
 import com.emelyanov.icerockpractice.modules.repos.modules.details.presentation.DetailInfoFragment
 import com.emelyanov.icerockpractice.modules.repos.modules.details.utils.NavigationConsts
@@ -37,7 +38,8 @@ constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getServerNotRespondingString: GetServerNotRespondingStringUseCase,
     private val getUndescribedErrorString: GetUndescribedErrorMessageUseCase,
-    private val getInvalidTokenString: GetInvalidTokenMessageUseCase
+    private val getInvalidTokenString: GetInvalidTokenMessageUseCase,
+    private val openUrl: OpenUrlUseCase
 ) : ViewModel() {
     private val _state: MutableLiveData<State> = MutableLiveData(State.Loading)
     val state: LiveData<State>
@@ -46,6 +48,8 @@ constructor(
     init {
         loadInfo()
     }
+
+    fun onLinkClick(url: String) = openUrl(url)
 
     fun loadInfo() {
         val owner = requireNotNull(savedStateHandle.get<String>(NavigationConsts.REPO_OWNER_KEY))
