@@ -43,10 +43,10 @@ class AppRepository(
     override suspend fun getRepositoryReadme(
         ownerName: String,
         repositoryName: String,
-        branchName: String
+        branchName: String?
     ): String {
         return gitRequestWrapper {
-            if(branchName.isEmpty())
+            if(branchName.isNullOrEmpty())
                 gitHubApi.getReadme(
                     token = getAuthHeader(),
                     owner = ownerName,
