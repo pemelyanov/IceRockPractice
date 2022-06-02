@@ -7,7 +7,6 @@ import androidx.core.content.edit
 
 private const val STORAGE_KEY = "GIT_STORAGE_KEY"
 private const val TOKEN_KEY = "GIT_TOKEN_KEY"
-private const val LOGIN_KEY = "GIT_LOGIN_KEY"
 
 class KeyValueStorage(
     context: Context
@@ -17,8 +16,4 @@ class KeyValueStorage(
     override var authToken: String?
         get() = storage.getString(TOKEN_KEY, null)
         set(value) = storage.edit().putString(TOKEN_KEY, value).apply()
-
-    override var userName: String?
-        get() = storage.getString(LOGIN_KEY, null)
-        set(value) = storage.edit().putString(LOGIN_KEY, value).apply()
 }

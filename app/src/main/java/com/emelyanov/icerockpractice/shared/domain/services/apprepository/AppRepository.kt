@@ -69,12 +69,10 @@ class AppRepository(
         gitHubApi.getUserInfo("token $token")
     }.toUserInfo().also {
         keyValueStorage.authToken = token
-        keyValueStorage.userName = it.login
     }
 
     override fun logout() {
         keyValueStorage.authToken = null
-        keyValueStorage.userName = null
     }
 
     override suspend fun getImageUrl(owner: String, repo: String, path: String): String
