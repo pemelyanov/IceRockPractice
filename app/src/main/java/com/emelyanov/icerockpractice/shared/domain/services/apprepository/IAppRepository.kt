@@ -9,7 +9,7 @@ interface IAppRepository {
 
         suspend fun getRepository(owner: String, repo: String): RepoDetails
 
-        suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String?): String
+        suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String? = null): String
 
         suspend fun signIn(token: String): UserInfo
 
