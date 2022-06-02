@@ -50,7 +50,12 @@ class MarkdownView(
     /**
      * Converts markdown to html and displays it with default dark github theme.
      */
-    fun loadMarkdownText(markdown: String) {
+    fun loadMarkdownText(markdown: String?) {
+        if(markdown == null){
+            loadData("", "text/html","utf-8")
+            return
+        }
+
         val tree = MarkdownParser(flavour).buildMarkdownTreeFromString(markdown)
         var html = HtmlGenerator(markdown, tree, flavour).generateHtml()
 
