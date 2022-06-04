@@ -18,15 +18,16 @@ suspend fun <T> gitRequestWrapper(request: suspend () -> T) : T {
     return try {
         request()
     } catch (ex: SocketTimeoutException) {
-        throw ServerNotRespondingException()
+        throw ServerNotRespondingException(ex)
     } catch(ex: SocketException) {
-        throw ConnectionErrorException()
+        throw ConnectionErrorException(ex)
     } catch (ex: HttpException) {
         when(ex.code()) {
             400 -> throw BadRequestException()
             401 -> {
                 val json = Json { ignoreUnknownKeys = true }
-                throw UnauthorizedException(json.decodeFromString<ErrorBody>(ex.response()!!.errorBody()!!.string()).message)
+                val message = json.decodeFromString<ErrorBody>(ex.response()!!.errorBody()!!.string()).message
+                throw UnauthorizedException(message, ex)
             }
             404 -> throw NotFoundException()
             else -> throw ex
@@ -34,8 +35,33 @@ suspend fun <T> gitRequestWrapper(request: suspend () -> T) : T {
     }
 }
 
-class ServerNotRespondingException : Exception()
-class ConnectionErrorException : Exception()
-class NotFoundException : Exception()
-class BadRequestException : Exception()
-class UnauthorizedException(override val message: String) : Exception(message)
+class ServerNotRespondingException : Exception {
+    constructor() : super()
+    constructor(message: String?) : super(message)
+    constructor(cause: Throwable?) : super(cause)
+    constructor(message: String, cause: Throwable) : super(message, cause)
+}
+class ConnectionErrorException : Exception {
+    constructor() : super()
+    constructor(message: String?) : super(message)
+    constructor(cause: Throwable?) : super(cause)
+    constructor(message: String, cause: Throwable) : super(message, cause)
+}
+class NotFoundException : Exception {
+    constructor() : super()
+    constructor(message: String?) : super(message)
+    constructor(cause: Throwable?) : super(cause)
+    constructor(message: String, cause: Throwable) : super(message, cause)
+}
+class BadRequestException : Exception {
+    constructor() : super()
+    constructor(message: String?) : super(message)
+    constructor(cause: Throwable?) : super(cause)
+    constructor(message: String, cause: Throwable) : super(message, cause)
+}
+class UnauthorizedException : Exception {
+    constructor() : super()
+    constructor(message: String?) : super(message)
+    constructor(cause: Throwable?) : super(cause)
+    constructor(message: String, cause: Throwable) : super(message, cause)
+}

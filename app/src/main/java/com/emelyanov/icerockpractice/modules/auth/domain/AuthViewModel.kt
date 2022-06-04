@@ -65,7 +65,7 @@ constructor(
                 _state.postValue(State.Idle)
                 _actions.send(Action.ShowError(getConnectionErrorString()))
             } catch (ex: UnauthorizedException) {
-                _state.postValue(State.InvalidInput(ex.message))
+                _state.postValue(State.InvalidInput(requireNotNull(ex.message)))
             } catch (ex: Exception) {
                 _state.postValue(State.Idle)
                 _actions.send(Action.ShowError(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
@@ -85,7 +85,7 @@ constructor(
                 signIn(token.value!!)
                 navigateToRepositoriesList()
             } catch (ex: UnauthorizedException) {
-                _state.postValue(State.InvalidInput(ex.message))
+                _state.postValue(State.InvalidInput(requireNotNull(ex.message)))
             } catch (ex: ServerNotRespondingException) {
                 _state.postValue(State.Idle)
                 _actions.send(Action.ShowError(getServerNotRespondingString()))
