@@ -11,6 +11,8 @@ import com.emelyanov.icerockpractice.modules.auth.domain.usecases.NavigateToRepo
 import com.emelyanov.icerockpractice.modules.auth.domain.usecases.SignInUseCase
 import com.emelyanov.icerockpractice.navigation.core.CoreDestinations
 import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
+import com.emelyanov.icerockpractice.shared.domain.models.RequestErrorType
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetConnectionErrorStringUseCase
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetServerNotRespondingStringUseCase
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetUndescribedErrorMessageUseCase
@@ -49,52 +51,48 @@ constructor(
     init {
         //Try to auth from local storage
         viewModelScope.launch {
-            try {
-                val token = getToken()
-                if(token == null) {
-                    _state.postValue(State.Idle)
-                    return@launch
-                }
-
-                signIn(token)
-                navigateToRepositoriesList()
-            } catch (ex: ServerNotRespondingException) {
+            val token = getToken()
+            if(token == null) {
                 _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(getServerNotRespondingString()))
-            } catch (ex: ConnectionErrorException) {
-                _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(getConnectionErrorString()))
-            } catch (ex: UnauthorizedException) {
-                _state.postValue(State.InvalidInput(requireNotNull(ex.message)))
-            } catch (ex: Exception) {
-                _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
+                return@launch
             }
+
+            processSignInResult(signIn(token))
         }
     }
 
     fun onSignButtonPressed() {
         viewModelScope.launch {
             _state.postValue(State.Loading)
-            try {
-                if(token.value.isNullOrEmpty()) {
-                    _state.postValue(State.InvalidInput(getEnterTheTokenString()))
-                    return@launch
-                }
+            if(token.value.isNullOrEmpty()) {
+                _state.postValue(State.InvalidInput(getEnterTheTokenString()))
+                return@launch
+            }
+            processSignInResult(signIn(token.value!!))
+        }
+    }
 
-                signIn(token.value!!)
-                navigateToRepositoriesList()
-            } catch (ex: UnauthorizedException) {
-                _state.postValue(State.InvalidInput(requireNotNull(ex.message)))
-            } catch (ex: ServerNotRespondingException) {
-                _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(getServerNotRespondingString()))
-            } catch (ex: ConnectionErrorException) {
-                _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(getConnectionErrorString()))
-            } catch (ex: Exception) {
-                _state.postValue(State.Idle)
-                _actions.send(Action.ShowError(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
+    private suspend fun processSignInResult(result: RequestResult<Unit>) {
+        when(result) {
+            is RequestResult.Success -> navigateToRepositoriesList()
+            is RequestResult.Error -> {
+                when(result.type) {
+                    RequestErrorType.ServerNotResponding -> {
+                        _state.postValue(State.Idle)
+                        _actions.send(Action.ShowError(getServerNotRespondingString()))
+                    }
+                    RequestErrorType.ConnectionError -> {
+                        _state.postValue(State.Idle)
+                        _actions.send(Action.ShowError(getConnectionErrorString()))
+                    }
+                    RequestErrorType.Unauthorized -> {
+                        _state.postValue(State.InvalidInput(requireNotNull(result.message)))
+                    }
+                    else -> {
+                        _state.postValue(State.Idle)
+                        _actions.send(Action.ShowError(result.message ?: "${getUndescribedErrorString()} ${result.exception?.let{it::class.java}}"))
+                    }
+                }
             }
         }
     }

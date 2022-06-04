@@ -1,5 +1,6 @@
 package com.emelyanov.icerockpractice.modules.auth.domain.usecases
 
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.IAppRepository
 import javax.inject.Inject
 
@@ -9,6 +10,6 @@ class SignInUseCase
 constructor(
     private val appRepository: IAppRepository
 ) {
-    suspend operator fun invoke(token: String)
-    = appRepository.signIn(token)
+    suspend operator fun invoke(token: String) : RequestResult<Unit>
+    = appRepository.signIn(token).map {}
 }

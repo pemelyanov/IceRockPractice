@@ -13,6 +13,8 @@ import com.emelyanov.icerockpractice.modules.repos.modules.details.utils.Navigat
 import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.RepositoriesListViewModel
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
+import com.emelyanov.icerockpractice.shared.domain.models.RequestErrorType
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetConnectionErrorStringUseCase
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetInvalidTokenMessageUseCase
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetServerNotRespondingStringUseCase
@@ -58,62 +60,69 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _state.postValue(State.Loading)
 
-            try {
-                getRepoDetails(owner, repo).let { repoDetails ->
+            getRepoDetails(owner, repo).let { result ->
+                when(result) {
+                    is RequestResult.Success -> {
+                        val newState = State.Loaded(
+                            githubRepo = result.data,
+                            readmeState = ReadmeState.Loading
+                        )
 
-                    val newState = State.Loaded(
-                        githubRepo = repoDetails,
-                        readmeState = ReadmeState.Loading
-                    )
+                        _state.postValue(newState)
 
-                    _state.postValue(newState)
-
-                    loadReadme(newState)
+                        loadReadme(newState)
+                    }
+                    is RequestResult.Error -> {
+                        when(result.type) {
+                            RequestErrorType.Unauthorized -> _state.postValue(State.Error(getInvalidTokenString()))
+                            RequestErrorType.ServerNotResponding -> _state.postValue(State.Error(getServerNotRespondingString()))
+                            RequestErrorType.ConnectionError -> _state.postValue(State.ConnectionError)
+                            else -> _state.postValue(State.Error(result.message ?: "${getUndescribedErrorString()} ${result.exception?.let{it::class.java}}"))
+                        }
+                    }
                 }
-            } catch (ex: UnauthorizedException) {
-                _state.postValue(State.Error(getInvalidTokenString()))
-            } catch (ex: ServerNotRespondingException) {
-                _state.postValue(State.Error(getServerNotRespondingString()))
-            } catch (ex: ConnectionErrorException) {
-                _state.postValue(State.ConnectionError)
-            } catch (ex: Exception) {
-                _state.postValue(State.Error(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
             }
         }
     }
 
     private suspend fun loadReadme(state: State.Loaded) {
-        try {
-            getRepoReadme(
-                owner = state.githubRepo.owner,
-                repo = state.githubRepo.name
-            ).let { markdown ->
-
-                //Replacing local image uri`s by global uri`s
-                replaceReadmeLocalUris(
-                    owner = state.githubRepo.owner,
-                    repo = state.githubRepo.name,
-                    readme = markdown
-                ).let { processedReadme ->
-                    _state.postValue(
-                        state.copy(
-                            readmeState = ReadmeState.Loaded(processedReadme)
-                        )
-                    )
+        getRepoReadme(
+            owner = state.githubRepo.owner,
+            repo = state.githubRepo.name
+        ).let { result ->
+            when(result) {
+                is RequestResult.Success -> {
+                    replaceReadmeLocalUris(
+                        owner = state.githubRepo.owner,
+                        repo = state.githubRepo.name,
+                        readme = result.data
+                    ).let { processedReadmeResult ->
+                        when(processedReadmeResult){
+                            is RequestResult.Success -> {
+                                _state.postValue(
+                                    state.copy(
+                                        readmeState = ReadmeState.Loaded(processedReadmeResult.data)
+                                    )
+                                )
+                            }
+                            is RequestResult.Error -> processReadmeErrors(processedReadmeResult, state)
+                        }
+                    }
                 }
+                is RequestResult.Error -> processReadmeErrors(result, state)
             }
-        } catch (ex: NotFoundException) {
-            _state.postValue(state.copy(readmeState = ReadmeState.Empty))
-        } catch (ex: UnauthorizedException) {
-            _state.postValue(state.copy(readmeState = ReadmeState.Error(getInvalidTokenString())))
-        } catch (ex: ServerNotRespondingException) {
-            _state.postValue(state.copy(readmeState = ReadmeState.Error(getServerNotRespondingString())))
-        } catch (ex: ConnectionErrorException) {
-            _state.postValue(state.copy(readmeState = ReadmeState.ConnectionError))
-        } catch (ex: Exception) {
-            _state.postValue(
+        }
+    }
+
+    private fun processReadmeErrors(result: RequestResult.Error<String>, state: State.Loaded) {
+        when(result.type) {
+            RequestErrorType.NotFound -> _state.postValue(state.copy(readmeState = ReadmeState.Empty))
+            RequestErrorType.Unauthorized -> _state.postValue(state.copy(readmeState = ReadmeState.Error(getInvalidTokenString())))
+            RequestErrorType.ServerNotResponding -> _state.postValue(state.copy(readmeState = ReadmeState.Error(getServerNotRespondingString())))
+            RequestErrorType.ConnectionError -> _state.postValue(state.copy(readmeState = ReadmeState.ConnectionError))
+            else -> _state.postValue(
                 state.copy(
-                    readmeState = ReadmeState.Error(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}")
+                    readmeState = ReadmeState.Error(result.message ?: "${getUndescribedErrorString()} ${result.exception?.let{it::class.java}}")
                 )
             )
         }

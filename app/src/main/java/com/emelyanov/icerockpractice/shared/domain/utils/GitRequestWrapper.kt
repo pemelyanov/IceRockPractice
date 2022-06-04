@@ -1,5 +1,7 @@
 package com.emelyanov.icerockpractice.shared.domain.utils
 
+import com.emelyanov.icerockpractice.shared.domain.models.RequestErrorType
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.models.responses.ErrorBody
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -14,25 +16,46 @@ import java.net.SocketTimeoutException
  * @throws BadRequestException
  * @throws UnauthorizedException
  */
-suspend fun <T> gitRequestWrapper(request: suspend () -> T) : T {
+suspend fun <T> gitRequestWrapper(request: suspend () -> T) : RequestResult<T> {
     return try {
-        request()
+        RequestResult.Success(data = request())
     } catch (ex: SocketTimeoutException) {
-        throw ServerNotRespondingException(ex)
+        RequestResult.Error(type = RequestErrorType.ServerNotResponding, exception = ex)
     } catch(ex: SocketException) {
-        throw ConnectionErrorException(ex)
+        RequestResult.Error(type = RequestErrorType.ConnectionError, exception = ex)
     } catch (ex: HttpException) {
-        when(ex.code()) {
-            400 -> throw BadRequestException()
-            401 -> {
-                val json = Json { ignoreUnknownKeys = true }
-                val message = json.decodeFromString<ErrorBody>(ex.response()!!.errorBody()!!.string()).message
-                throw UnauthorizedException(message, ex)
-            }
-            404 -> throw NotFoundException()
-            else -> throw ex
+        processHttpException(ex)
+    } catch (ex: Exception) {
+        RequestResult.Error(
+            message = ex.message,
+            type =RequestErrorType.UnknownError,
+            exception = ex
+        )
+    }
+}
+
+private fun <T> processHttpException(ex: HttpException) : RequestResult<T>
+= when(ex.code()) {
+    400 -> RequestResult.Error(type = RequestErrorType.BadRequest, exception = ex)
+    401 -> {
+        try {
+            val json = Json { ignoreUnknownKeys = true }
+            val message = json.decodeFromString<ErrorBody>(ex.response()!!.errorBody()!!.string()).message
+            RequestResult.Error(
+                message = message,
+                type = RequestErrorType.Unauthorized,
+                exception = ex
+            )
+        } catch (e: Exception) {
+            RequestResult.Error(RequestErrorType.ParseFailed, exception = e)
         }
     }
+    404 -> RequestResult.Error(RequestErrorType.NotFound)
+    else -> RequestResult.Error(
+        message = ex.message,
+        type =RequestErrorType.UnknownError,
+        exception = ex
+    )
 }
 
 class ServerNotRespondingException : Exception {

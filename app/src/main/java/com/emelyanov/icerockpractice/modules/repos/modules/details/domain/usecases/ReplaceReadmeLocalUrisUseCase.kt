@@ -1,6 +1,8 @@
 package com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases
 
 import android.util.Log
+import com.emelyanov.icerockpractice.shared.domain.models.RequestErrorType
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.AppRepository
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.IAppRepository
 import com.emelyanov.icerockpractice.shared.domain.utils.parseLocalUris
@@ -17,7 +19,7 @@ class ReplaceReadmeLocalUrisUseCase
 constructor(
     private val appRepository: IAppRepository
 ) {
-    suspend operator fun invoke(owner:String, repo:String, readme: String): String {
+    suspend operator fun invoke(owner:String, repo:String, readme: String): RequestResult<String> {
         val uris = parseLocalUris(readme)
 
         val readmeBuilder = StringBuilder(readme)
@@ -25,20 +27,29 @@ constructor(
         uris.forEach { localUri ->
             val globalUri = appRepository.getImageUrl(owner, repo, localUri.uri)
 
-            //Start index of image block
-            val startIndex = readmeBuilder.indexOf(localUri.entry)
-            if(startIndex == -1) return@forEach
+            when(globalUri) {
+                is RequestResult.Error -> return@invoke RequestResult.Error(
+                    message = globalUri.message,
+                    type = globalUri.type,
+                    exception = globalUri.exception
+                )
+                is RequestResult.Success -> {
+                    //Start index of image block
+                    val startIndex = readmeBuilder.indexOf(localUri.entry)
+                    if(startIndex == -1) return@forEach
 
-            //Length of image block
-            val len = localUri.entry.length
+                    //Length of image block
+                    val len = localUri.entry.length
 
-            //Replacing local uri in image block with global uri
-            val newImageBlock = localUri.entry.replace(localUri.uri, globalUri)
+                    //Replacing local uri in image block with global uri
+                    val newImageBlock = localUri.entry.replace(localUri.uri, globalUri.data)
 
-            //Replacing old image block with new
-            readmeBuilder.replace(startIndex, startIndex + len, newImageBlock)
+                    //Replacing old image block with new
+                    readmeBuilder.replace(startIndex, startIndex + len, newImageBlock)
+                }
+            }
         }
 
-        return readmeBuilder.toString()
+        return RequestResult.Success(readmeBuilder.toString())
     }
 }

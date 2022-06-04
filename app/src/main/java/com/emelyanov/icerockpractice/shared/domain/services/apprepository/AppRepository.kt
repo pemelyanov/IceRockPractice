@@ -4,7 +4,9 @@ import android.util.Base64
 import android.util.Log
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
 import com.emelyanov.icerockpractice.shared.domain.models.RepoDetails
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.models.UserInfo
+import com.emelyanov.icerockpractice.shared.domain.models.responses.RepositoryShortResponse
 import com.emelyanov.icerockpractice.shared.domain.services.colors.ILanguageColorsRepository
 import com.emelyanov.icerockpractice.shared.domain.services.githubapi.IGitHubApi
 import com.emelyanov.icerockpractice.shared.domain.services.keyvaluestorage.IKeyValueStorage
@@ -21,30 +23,34 @@ class AppRepository(
     private val keyValueStorage: IKeyValueStorage,
     private val colorsRepository: ILanguageColorsRepository
 ) : IAppRepository {
-    override suspend fun getRepositories(): List<Repo>
-    = gitRequestWrapper {
+    override suspend fun getRepositories(): RequestResult<List<Repo>>
+            = gitRequestWrapper {
         gitHubApi.getRepositories(getAuthHeader())
-    }.map { repoResponse ->
-        repoResponse.toRepo().let { repo ->
-            if(repo.language.isEmpty()) return@let repo
-            repo.copy(color = colorsRepository.getLangColor(repo.language))
+    }.map { list ->
+        list.map { repoResponse ->
+            repoResponse.toRepo().let { repo ->
+                if(repo.language.isEmpty()) return@let repo
+                repo.copy(color = colorsRepository.getLangColor(repo.language))
+            }
         }
     }
 
-    override suspend fun getRepository(owner: String, repo: String): RepoDetails
-    = gitRequestWrapper {
+    override suspend fun getRepository(owner: String, repo: String): RequestResult<RepoDetails>
+            = gitRequestWrapper {
         gitHubApi.getRepoDetails(
             token = getAuthHeader(),
             owner = owner,
             repo = repo
         )
-    }.toRepoDetails()
+    }.map {
+        it.toRepoDetails()
+    }
 
     override suspend fun getRepositoryReadme(
         ownerName: String,
         repositoryName: String,
         branchName: String?
-    ): String {
+    ): RequestResult<String> {
         return gitRequestWrapper {
             if(branchName.isNullOrEmpty())
                 gitHubApi.getReadme(
@@ -59,29 +65,35 @@ class AppRepository(
                     repo = repositoryName,
                     branch = branchName
                 )
-        }.let {
+        }.map {
             Base64.decode(it.content, Base64.DEFAULT).decodeToString()
         }
     }
 
-    override suspend fun signIn(token: String): UserInfo
-    = gitRequestWrapper {
+    override suspend fun signIn(token: String): RequestResult<UserInfo>
+            = gitRequestWrapper {
         gitHubApi.getUserInfo("token $token")
-    }.toUserInfo().also {
-        keyValueStorage.authToken = token
+    }.map {
+        it.toUserInfo()
+    }.also {
+        if(it is RequestResult.Success)
+            keyValueStorage.authToken = token
     }
+
 
     override fun logout() {
         keyValueStorage.authToken = null
     }
 
-    override suspend fun getImageUrl(owner: String, repo: String, path: String): String
-    = gitRequestWrapper {
+    override suspend fun getImageUrl(owner: String, repo: String, path: String): RequestResult<String>
+            = gitRequestWrapper {
         gitHubApi.getContent(
             token = getAuthHeader(),
             owner = owner,
             repo = repo,
             path = path
         )
-    }.downloadUrl
+    }.map {
+        it.downloadUrl
+    }
 }

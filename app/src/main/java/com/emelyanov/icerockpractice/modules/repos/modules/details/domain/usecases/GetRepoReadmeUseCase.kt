@@ -1,5 +1,6 @@
 package com.emelyanov.icerockpractice.modules.repos.modules.details.domain.usecases
 
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.AppRepository
 import com.emelyanov.icerockpractice.shared.domain.services.apprepository.IAppRepository
 import javax.inject.Inject
@@ -13,7 +14,7 @@ constructor(
     suspend operator fun invoke(
         owner: String,
         repo: String
-    ) : String
+    ) : RequestResult<String>
     = appRepository.getRepositoryReadme(
         ownerName = owner,
         repositoryName = repo

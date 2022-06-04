@@ -11,6 +11,8 @@ import com.emelyanov.icerockpractice.modules.repos.modules.list.domain.usecases.
 import com.emelyanov.icerockpractice.navigation.core.CoreDestinations
 import com.emelyanov.icerockpractice.navigation.core.CoreNavProvider
 import com.emelyanov.icerockpractice.shared.domain.models.Repo
+import com.emelyanov.icerockpractice.shared.domain.models.RequestErrorType
+import com.emelyanov.icerockpractice.shared.domain.models.RequestResult
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetInvalidTokenMessageUseCase
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetServerNotRespondingStringUseCase
 import com.emelyanov.icerockpractice.shared.domain.usecases.GetUndescribedErrorMessageUseCase
@@ -43,25 +45,28 @@ constructor(
     fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.postValue(State.Loading)
-            try {
-                getRepos().let {
-                    if(it.isEmpty())
-                        _state.postValue(State.Empty)
-                    else
-                        _state.postValue(
-                            State.Loaded(
-                                repos = it
+
+            getRepos().let { result ->
+                when(result) {
+                    is RequestResult.Success -> {
+                        if(result.data.isEmpty())
+                            _state.postValue(State.Empty)
+                        else
+                            _state.postValue(
+                                State.Loaded(
+                                    repos = result.data
+                                )
                             )
-                        )
+                    }
+                    is RequestResult.Error -> {
+                        when(result.type) {
+                            RequestErrorType.Unauthorized -> _state.postValue(State.Error(getInvalidTokenString()))
+                            RequestErrorType.ServerNotResponding -> _state.postValue(State.Error(getServerNotRespondingString()))
+                            RequestErrorType.ConnectionError ->  _state.postValue(State.ConnectionError)
+                            else -> _state.postValue(State.Error(result.message ?: "${getUndescribedErrorString()} ${result.exception?.let{it::class.java}}"))
+                        }
+                    }
                 }
-            } catch (ex: UnauthorizedException) {
-                _state.postValue(State.Error(getInvalidTokenString()))
-            } catch (ex: ServerNotRespondingException) {
-                _state.postValue(State.Error(getServerNotRespondingString()))
-            } catch (ex: ConnectionErrorException) {
-                _state.postValue(State.ConnectionError)
-            } catch (ex: Exception) {
-                _state.postValue(State.Error(ex.message ?: "${getUndescribedErrorString()} ${ex::class.java}"))
             }
         }
     }
