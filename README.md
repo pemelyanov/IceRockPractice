@@ -2,6 +2,7 @@
 -------------------------
 **Пратическое задание IceRock**
 -------------------------
+Макет: https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test-Android?node-id=0%3A1
 
 ### TODO:
 - [x] Авторизация пользователя (personal access token)

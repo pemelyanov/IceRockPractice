@@ -9,13 +9,6 @@ import retrofit2.HttpException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 
-/**
- * @throws ServerNotRespondingException
- * @throws ConnectionErrorException
- * @throws NotFoundException
- * @throws BadRequestException
- * @throws UnauthorizedException
- */
 suspend fun <T> gitRequestWrapper(request: suspend () -> T) : RequestResult<T> {
     return try {
         RequestResult.Success(data = request())
