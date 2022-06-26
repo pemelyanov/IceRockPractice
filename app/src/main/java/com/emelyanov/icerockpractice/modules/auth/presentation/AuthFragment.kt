@@ -35,8 +35,8 @@ class AuthFragment : Fragment() {
             viewModel.state.observe(viewLifecycleOwner) {
                 authButtonProgressbar.visibility = if(it is AuthViewModel.State.Loading) View.VISIBLE else View.GONE
                 authButton.isEnabled = it !is AuthViewModel.State.Loading
-                authButton.text = if(it is AuthViewModel.State.Loading) "" else getText(com.emelyanov.icerockpractice.R.string.sign_in_button)
-                tokenField.error = if(it is AuthViewModel.State.InvalidInput) it.reason else ""
+                authButton.text = if(it is AuthViewModel.State.Loading) null else getText(com.emelyanov.icerockpractice.R.string.sign_in_button)
+                tokenField.error = if(it is AuthViewModel.State.InvalidInput) it.reason else null
             }
 
             authButton.setOnClickListener {

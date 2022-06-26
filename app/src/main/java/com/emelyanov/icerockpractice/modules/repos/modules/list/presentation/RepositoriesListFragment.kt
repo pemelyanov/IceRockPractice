@@ -42,21 +42,17 @@ class RepositoriesListFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) {
             with(binding) {
-                if(it is RepositoriesListViewModel.State.Loaded) {
-                    reposRecycler.visibility = View.VISIBLE
-                    adapter.items = it.repos
-                } else { reposErrorState.root.visibility = View.GONE }
+                reposRecycler.visibility = if(it is RepositoriesListViewModel.State.Loaded) View.VISIBLE else View.GONE
 
+                adapter.items = if(it is RepositoriesListViewModel.State.Loaded) it.repos else emptyList()
                 reposProgressbar.visibility = if(it is RepositoriesListViewModel.State.Loading) View.VISIBLE else View.GONE
 
                 reposEmptyState.root.visibility = if(it is RepositoriesListViewModel.State.Empty) View.VISIBLE else View.GONE
 
                 reposConnectionErrorState.root.visibility = if(it is RepositoriesListViewModel.State.ConnectionError) View.VISIBLE else View.GONE
 
-                if(it is RepositoriesListViewModel.State.Error) {
-                    reposErrorState.root.visibility = View.VISIBLE
-                    reposErrorState.errorDescription.text = it.error
-                } else { reposErrorState.root.visibility = View.GONE }
+                reposErrorState.root.visibility = if(it is RepositoriesListViewModel.State.Error) View.VISIBLE else View.GONE
+                reposErrorState.errorDescription.text = if(it is RepositoriesListViewModel.State.Error) it.error else null
 
                 reposEmptyState.refreshButton.setOnClickListener { viewModel.refresh() }
                 reposConnectionErrorState.retryButton.setOnClickListener { viewModel.refresh() }
